@@ -1,4 +1,7 @@
-
+var state = cc.Enum({
+    Static: 0,
+    Dynamic: 1
+});
 cc.Class({
     extends: cc.Component,
 
@@ -15,17 +18,7 @@ cc.Class({
         },
         scrollView: {
             default: null,
-            type: cc.ScrollView,
-            visible: function () {
-                return !this.is;
-            },
-            serializable: function () {
-                return !this.is;
-            }
-        },
-        is: {
-            default: false,
-            tooltip: '滑动视图是否在邦定此脚本组件的当前节点上'
+            type: cc.ScrollView
         },
         isPrefabTemplate: {
             default: false,
@@ -45,9 +38,20 @@ cc.Class({
             default: 'String',
             tooltip: '項目組件'
         }, //組件名
+        updateStyle: {
+            default: state.Dynamic,
+            type: state,
+            tooltip: '更新item的方式，Static为静态更新，Dynamic为动态更新'
+        },
         spawnCount: {
             default: 0,
-            tooltip: '實際創建的項目數'
+            tooltip: '實際創建的項目數',
+            visible: function () {
+                return this.updateStyle == state.Dynamic ? true : false;
+            },
+            serializable: function () {
+                return this.updateStyle == state.Dynamic ? true : false;
+            }
         },// how many items we actually spawn 實際創建的item數
         totalCount: {
             default: 0,
@@ -59,7 +63,13 @@ cc.Class({
         },// space between each item 兩個item之間的間隔
         bufferZone: {
             default: 0,
-            tooltip: '緩衝區大小'
+            tooltip: '緩衝區大小',
+            visible: function () {
+                return this.updateStyle == state.Dynamic ? true : false;
+            },
+            serializable: function () {
+                return this.updateStyle == state.Dynamic ? true : false;
+            }
         },// when item is away from bufferZone, we relocate it 緩衝區大小
         _horizontal: false,
         _vertical: true,
@@ -68,11 +78,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        if (this.is) {
-            this.scrollView = this.node.getComponent(cc.ScrollView);
-        }
         this.content = this.scrollView.content;
-        (this.scrollView.content);
 
         // this.content = this.scrollView.node.getChildByName('view').getChildByName('content');
         this.items = [];
@@ -92,7 +98,6 @@ cc.Class({
     initialize: function (itemINFO) {
         // console.log('initialize')
         this.info = itemINFO;
-
         if (this.isPrefabTemplate) {
             this.initTemplate();
         }
@@ -118,6 +123,9 @@ cc.Class({
                 this.removeItemInPool(this.items[i]);
             }
             this.items.splice(0, this.items.length);
+        }
+        if (this.updateStyle == 0) {
+            this.spawnCount = this.totalCount;
         }
         for (let i = 0; i < this.spawnCount; i++)
         {
@@ -149,6 +157,9 @@ cc.Class({
     initItemPool: function (itemTemplate) {
         // console.log('initItemPool')
         this.itemPool = new cc.NodePool();
+        if (this.updateStyle == 0) {
+            this.spawnCount = this.totalCount;
+        }
         for (let i = 0; i < this.spawnCount; i++)
         {
             let item = cc.instantiate(itemTemplate);
@@ -209,6 +220,7 @@ cc.Class({
     },
 
     update (dt) {
+        if (this.updateStyle == 0) return;
         this.updateTimer += dt;
         if (this.updateTimer < this.updateIntervar) return; //每兩幀執行一次
         if (this.itemTemplate == null) return;

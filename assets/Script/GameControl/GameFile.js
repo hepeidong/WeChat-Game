@@ -50,7 +50,7 @@ var GameFile = (function(){
                     data[key] = gameSetMap[key];
                 }
                 GameData.Instance.addDataToBaseGameSet(data);
-                return GameData.Instance.Get(cc.Gl.Key_To_Set)
+                return GameData.Instance.Get(cc.Gl.Key_To_Set);
             },
             writeJS_GameSetMap: function(data) {
                 GameData.Instance.addDataToBaseGameSet(data);

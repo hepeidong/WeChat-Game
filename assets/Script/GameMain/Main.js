@@ -4,28 +4,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         if (GameControl.runGameControl()) {
-            console.log('游戏框架启动成功');
+            cc.Utl.WriteLog('游戏框架启动成功');
+            cc.GamePlatform.ScreenFitWidth();
+            // var canvas = cc.find('Canvas');
+            // for (let key in canvas.children) {
+            //     canvas.children[key].scaleX = cc.GamePlatform.GetScreenScaleX();
+            //     canvas.children[key].scaleY = cc.GamePlatform.GetScreenScaleY();
+            // }
         }
     },
 

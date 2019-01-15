@@ -3,6 +3,7 @@ var GameData = require('GameData');
 var GameFile = require('GameFile');
 var SoundManager = require('SoundManager');
 var GamePlatform = require('GamePlatform');
+var Until = require('Until');
 
 var GameControl = (function() {
     var _gameControl = null;
@@ -26,6 +27,7 @@ var GameControl = (function() {
         cc.SoundManager = SoundManager;
 
         cc.GamePlatform = new GamePlatform();
+        cc.Utl = new Until();
         return true; 
     }
 

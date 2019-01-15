@@ -4,6 +4,8 @@
 
 var Gl = {}
 
-Gl.Key_To_Set = 'key_to_set';
+Gl.Key_To_Set = 'key_to_set';//设置信息 {}
+
+
 
 module.exports = Gl;
