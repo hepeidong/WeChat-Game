@@ -401,6 +401,45 @@ cc.Class({
         return true;
     },
 
+    //拷贝数组,用于扑克牌数组的拷贝
+    copyMemory: function (tArray, fArray, fArrayCount, index) {
+        for (var i = index; i < fArrayCount; i++) {
+            if (fArray[i] != 0) {
+                tArray.push(fArray[i]);
+            }
+        }
+        return tArray;
+    },
+
+    //从数组中删除一个元素
+    spliceArrayElementOne: function (array, element) {
+        if (array == undefined) {
+            return array;
+        }
+        for (var ii = 0; ii < array.length; ii++) {
+            if (array[ii] == element) {
+                array.splice(ii, 1);
+                break;
+            }
+        }
+        return array;
+    },
+
+    //是否有相同元素
+    contains: function (arr, obj) {
+        var i = arr.length;
+        while (i--) {
+            if (arr[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    //计算两点距离
+    distance: function (x1, y1, x2, y2) {
+        return Math.sqrt(Math.abs(x1 - x2)*Math.abs(x1 - x2) + Math.abs(y1 - y2)*Math.abs(y1 - y2));
+    }
 
     // update (dt) {},
 });

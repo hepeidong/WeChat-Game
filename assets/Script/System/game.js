@@ -68,29 +68,30 @@ cc.Class({
         // cc.Utl.openView('Coupon', (viewNode) => {
         //     viewNode.getComponent('ListViewCtrl').initialize(null);
         // });
-        var testNode = this.node.getChildByName('testNode');
-        var newNode = new cc.Node();
-        var newSprite = newNode.addComponent(cc.Sprite);
-        newSprite.spriteFrame = testNode.getComponent(cc.Sprite).spriteFrame;
-        newNode.parent = this.node;
-        var positon = cc.v2(newNode.x, newNode.y);
-        newNode.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
-            var delta = event.touch.getDelta();
-            newNode.x += delta.x;
-            newNode.y += delta.y;
-            positon.x += delta.x;
-            positon.y += delta.y;
-        }, newNode);
-        var that = this;
-        newNode.on(cc.Node.EventType.TOUCH_END, function (event) {
-            var newNode2 = new cc.Node();
-            newNode2.x = positon.x;
-            newNode2.y = positon.y;
-            var newSprite2 = newNode2.addComponent(cc.Sprite);
-            newSprite2.spriteFrame = testNode.getComponent(cc.Sprite).spriteFrame;
-            that.node.addChild(newNode2);
-            newNode.destroy();
-        }, newNode);
+        // var testNode = this.node.getChildByName('testNode');
+        // var newNode = new cc.Node();
+        // var newSprite = newNode.addComponent(cc.Sprite);
+        // newSprite.spriteFrame = testNode.getComponent(cc.Sprite).spriteFrame;
+        // newNode.parent = this.node;
+        // var positon = cc.v2(newNode.x, newNode.y);
+        // newNode.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
+        //     var delta = event.touch.getDelta();
+        //     newNode.x += delta.x;
+        //     newNode.y += delta.y;
+        //     positon.x += delta.x;
+        //     positon.y += delta.y;
+        // }, newNode);
+        // var that = this;
+        // newNode.on(cc.Node.EventType.TOUCH_END, function (event) {
+        //     var newNode2 = new cc.Node();
+        //     newNode2.x = positon.x;
+        //     newNode2.y = positon.y;
+        //     var newSprite2 = newNode2.addComponent(cc.Sprite);
+        //     newSprite2.spriteFrame = testNode.getComponent(cc.Sprite).spriteFrame;
+        //     that.node.addChild(newNode2);
+        //     newNode.destroy();
+        // }, newNode);
+        cc.Utl.loadPrefab('TestBuilding', this.node);
     },
 
     // called every frame

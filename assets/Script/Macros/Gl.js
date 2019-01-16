@@ -6,6 +6,6 @@ var Gl = {}
 
 Gl.Key_To_Set = 'key_to_set';//设置信息 {}
 
-
+Gl.Key_To_Coords = 'key_to_coords';//坐标信息 []
 
 module.exports = Gl;
