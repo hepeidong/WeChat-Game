@@ -47,7 +47,7 @@ cc.Class({
         else {
             this.adjaCoords = this.adjacentCoords(n, m);//相邻坐标
         }
-        console.log(this.adjaCoords);
+        console.log('n: ' + n + ' m:' + m);
     },
 
     //计算相邻坐标点
@@ -70,7 +70,9 @@ cc.Class({
             var b = m - 1 + i;
             if (this.groupCoords[a].length >= (b + 1)) {
                 // coords.push(this.groupCoords[a][b]);
-                coords.push({x: this.groupCoords[a][b].x, y: this.groupCoords[a][b].y, n: a, m: b});
+                if (this.groupCoords[a][b] != this.buildingCoord.x && this.groupCoords[a][b].y != this.buildingCoord.y) {
+                    coords.push({x: this.groupCoords[a][b].x, y: this.groupCoords[a][b].y, n: a, m: b});
+                }
             }
         }
     },
@@ -84,10 +86,10 @@ cc.Class({
             this.delta.y += delta.y;
             for (let i = 0; i < this.adjaCoords.length; ++i) {
                 var distance = cc.Utl.distance(this.buildingCoord.x+this.delta.x, this.buildingCoord.y+this.delta.y, this.adjaCoords[i].x, this.adjaCoords[i].y);
-                if (distance <= 10) {
+                if (distance <= 10 && distance > 0) {
                     this.setCoord(this.adjaCoords[i].n, this.adjaCoords[i].m);
-                    this.delta.x = 0;
-                    this.delta.y = 0;
+                    // this.delta.x = 0;
+                    // this.delta.y = 0;
                 }
             }
         }
