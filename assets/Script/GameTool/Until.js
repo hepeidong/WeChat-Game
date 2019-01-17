@@ -439,7 +439,42 @@ cc.Class({
     //计算两点距离
     distance: function (x1, y1, x2, y2) {
         return Math.sqrt(Math.abs(x1 - x2)*Math.abs(x1 - x2) + Math.abs(y1 - y2)*Math.abs(y1 - y2));
+    },
+
+    //两个坐标相等
+    isEqual: function (coord1, coord2) {
+        if (coord1.x == coord2.x && coord1.y == coord2.y) {
+            return true;
+        }
+        return false;
+    },
+
+    //计算弧度
+    radian: function (angle) {
+        return Math.PI * angle / 180;
+    },
+
+    //计算角度
+    angle: function (r) {
+        return r*180 / Math.PI;
+    },
+
+    //转换坐标
+    rotationCoordinate: function (coord, angle) {
+        if (angle > 0) {
+            var x = coord.x * Math.cos(this.radian(angle)) + coord.y * Math.sin(this.radian(angle));
+            var y = coord.y * Math.cos(this.radian(angle)) + coord.x * Math.sin(this.radian(angle));
+            return {x: x, y: y};
+        }
+        else if (angle < 0) {
+            var x = coord.x * Math.cos(this.radian(angle)) - coord.y * Math.sin(this.radian(angle));
+            var y = coord.y * Math.cos(this.radian(angle)) + coord.x * Math.sin(this.radian(angle));
+            return {x: x, y: y};
+        }
+        return coord;
     }
+
+
 
     // update (dt) {},
 });
