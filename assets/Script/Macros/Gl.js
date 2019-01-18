@@ -4,8 +4,13 @@
 
 var Gl = {}
 
-Gl.Key_To_Set = 'key_to_set';//设置信息 {}
+Gl.Key_Set = 'key_set';//设置信息 {}
 
-Gl.Key_To_Coords = 'key_to_coords';//坐标信息 []
+Gl.Key_Coords = 'key_coords';//坐标信息 []
+
+Gl.Key_BrickId = 'key_brickId';//砖块id Number
+
+Gl.Key_FWP = 'key_furnitureWorldPos';//家具的世界坐标
+Gl.Key_FWP2 = 'key_f2';
 
 module.exports = Gl;

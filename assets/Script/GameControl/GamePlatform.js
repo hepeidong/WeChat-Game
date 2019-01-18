@@ -20,7 +20,8 @@ function GamePlatform() {
 
 GamePlatform.prototype = {
     GetScreenSize() {
-        return cc.director.getWinSize();
+        // return cc.director.getWinSize();
+        return cc.director.getVisibleSize();
     },
     GetWinSizeInPixels() {
         return cc.director.getWinSizeInPixels();

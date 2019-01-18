@@ -25,7 +25,8 @@
     "REMOTE_SERVER_ROOT": "",
     "orientation": "portrait"
   },
-  "startScene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
+  "renderMode": "0",
+  "startScene": "38276f51-cf6e-497f-b172-410c54b0ac31",
   "title": "hello_world",
   "webOrientation": "auto",
   "wechatgame": {
@@ -36,6 +37,5 @@
     "subContext": ""
   },
   "xxteaKey": "6a3ebc51-5d7d-4d",
-  "zipCompressJs": true,
-  "renderMode": "0"
+  "zipCompressJs": true
 }

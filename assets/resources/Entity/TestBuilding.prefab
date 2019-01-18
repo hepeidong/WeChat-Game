@@ -122,7 +122,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": -59
+      "y": -87
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -455,7 +455,7 @@
     "_position": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": 33
+      "y": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -502,14 +502,13 @@
     "sync": false
   },
   {
-    "__type__": "24992Y9m8BKCp/rOXz5SpS4",
+    "__type__": "af827Ho+KhGdY5pAPDpkUXa",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 1
     },
-    "_enabled": true,
-    "isMove": true
+    "_enabled": true
   },
   {
     "__type__": "cc.PrefabInfo",
