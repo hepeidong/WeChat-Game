@@ -472,9 +472,21 @@ cc.Class({
             return {x: x, y: y};
         }
         return coord;
-    }
+    },
 
+    //相对于某个坐标点的target矩形区域所占用的范围
+    rectRegion: function (x, y, target) {
+        // var X1 = this.node.x - this.node.getContentSize().width / 2;
+        // var X2 = this.node.getContentSize().width / 2 - this.node.x;
+        // var Y1 = this.node.y - this.node.getContentSize().height / 2;
+        // var Y2 = this.node.getContentSize().height / 2 - this.node.y;
 
+        var X1 = x - target.getContentSize().width / 2;
+        var X2 = target.getContentSize().width / 2 + x;
+        var Y1 = y - target.getContentSize().height / 2;
+        var Y2 = target.getContentSize().height / 2 + y;
+        return {x1: X1, x2: X2, y1: Y1, y2: Y2};
+    },
 
     // update (dt) {},
 });

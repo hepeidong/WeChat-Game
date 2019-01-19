@@ -11,6 +11,6 @@ Gl.Key_Coords = 'key_coords';//坐标信息 []
 Gl.Key_BrickId = 'key_brickId';//砖块id Number
 
 Gl.Key_FWP = 'key_furnitureWorldPos';//家具的世界坐标
-Gl.Key_FWP2 = 'key_f2';
+Gl.Key_SBId= 'key_SBId';//被手指点中的砖块的Id，必须是空闲状态的砖块
 
 module.exports = Gl;
