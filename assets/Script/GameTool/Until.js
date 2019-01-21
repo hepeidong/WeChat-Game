@@ -15,6 +15,15 @@ cc.Class({
 
     },
 
+    ctor() {
+        this.D = {
+            NE: 0, //东北
+            SE: 1, //东南
+            SW: 2, //西南
+            NW: 3  //西北
+        }
+    },
+
     Log: function (text) {
         var str = text.split('@');
         if (typeof str[0] == 'string') {
@@ -487,6 +496,58 @@ cc.Class({
         var Y2 = target.getContentSize().height / 2 + y;
         return {x1: X1, x2: X2, y1: Y1, y2: Y2};
     },
+
+    //菱形所占用的区域
+    diamRegion: function (x, y, target) {
+        var coord1 = {x: x - target.getContentSize().width / 2, y: y};
+        var coord2 = {x: x, y: y - target.getContentSize().width / 2};
+        var coord3 = {x: x + target.getContentSize().width / 2, y: y};
+        var coord4 = {x: x, y: y + target.getContentSize().width / 2};
+
+        var equ1 = this.coordEquation(coord1, coord2);
+        var equ2 = this.coordEquation(coord2, coord3);
+        var equ3 = this.coordEquation(coord3, coord4);
+        var equ4 = this.coordEquation(coord1, coord4);
+
+        return {c1: coord1, c2: coord2, c3: coord3, c4: coord4, e1: equ1, e2: equ2, e3: equ3, e4: equ4};
+    },
+
+    //计算方程
+    coordEquation: function (coord1, coord2) {
+        var a = (coord2.y - coord1.y) / (coord2.x, coord1.x);
+        var b = coord1.y - a * coord1.x;
+        return {a: a, b: b};
+    },
+
+    //坐标点是否在菱形区域内 @param {cc.Node} target
+    isInDiamRegion: function (coord, dia) {
+        if (this.isInDirecOfEqu(coord, this.D.NE, dia.e1) && this.isInDirecOfEqu(coord, this.D.NW, dia.e2) 
+        && this.isInDirecOfEqu(coord, this.D.SW, dia.e3) && this.isInDirecOfEqu(coord, this.D.SE, dia.e4)) 
+        {
+            return true;
+        }
+        return false;
+    },
+
+    //坐标点是否在方程的这个方向上，dir为方向，equ为方程
+    isInDirecOfEqu: function (coord, dir, equ) {
+        // console.log(coord);
+        if (equ.a > 0) {
+            // if (dir == this.D.SW || dir == this.D.NE) return false;
+            console.log('111111111111111111');
+            var b = coord.y - equ.a * coord.x;
+            var d = b > equ.b ? this.D.NW : this.D.SE;
+            if (dir == d) return true;
+        }
+        else if (equ.a < 0) {
+            // if (dir == this.D.NW || dir == this.D.SE) return false;
+            console.log('2222222222222222');
+            var b = coord.y - equ.a * coord.x;
+            var d = b > equ.b ? this.D.NE : this.D.SW;
+            if (dir == d) return true;
+        }
+        return false;
+    }
 
     // update (dt) {},
 });

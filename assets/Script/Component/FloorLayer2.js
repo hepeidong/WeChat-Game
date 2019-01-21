@@ -1,6 +1,14 @@
 //第一行砖块的坐标
-var coordList = [
+// var coordList = [
     // {x: -339, y: 320}, {x: -229, y: 320}, {x: -119, y: 320}, {x: -9, y: 320}, {x: 101, y: 320}, {x: 211, y: 320}, {x: 321, y: 320}
+// ]
+var coordList = [
+    [{x: -18, y: 328},{x: -64.1, y: 297.8},{x: -110.5, y: 267.3},{x: -155.5, y: 236.5},{x: -202, y: 206},{x: -248, y: 175.6}],
+    [{x: 27, y: 297.6},{x: -18.7, y: 267},{x: -64.7, y: 237},{x: -109.7, y: 206},{x: -156.7, y: 176},{x: -202.7, y: 146}],
+    [{x: 73, y: 267},{x: 27, y: 236},{x: -19, y: 206},{x: -64, y: 175},{x: -111, y: 145},{x: -157, y: 115}],
+    [{x: 119, y: 236},{x: 73, y: 205},{x: 27, y: 175},{x: -18, y: 144},{x: -65, y: 114},{x: -111, y: 84}],
+    [{x: 165, y: 206},{x: 119, y: 175},{x: 73, y: 145},{x: 28, y: 114},{x: -19, y: 84},{x: -65, y: 54}],
+    [{x: 210, y: 175},{x: 164, y: 144},{x: 118, y: 114},{x: 73, y: 83},{x: 26, y: 53},{x: -20, y: 23}]
 ]
 
 var originCoord = {x: 321, y: 320}
@@ -33,8 +41,8 @@ cc.Class({
         this.floorChildren = [];//所有子节点
 
         // this.scaleFloor();
-        this.coordList();
-        this.rotationFloor();
+        // this.coordList();
+        // this.rotationFloor();
         this.brickLaying();
 
         this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
@@ -43,12 +51,20 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
     
         this.furniture = null; //家具
+
+        // var children = this.node.getChildren();
+        // var c = [];
+        // for (let i = 0; i < children.length; ++i) {
+        //     c.push({x: children[i].x, y: children[i].y});
+        // }
+        // console.log(c);
     },
 
     start () {
 
     },
 
+    //计算coordList坐标
     coordList: function () {
         for (let i = this.rank - 1; i >= 0; --i) {
             originCoord.x = i == (this.rank - 1) ? originCoord.x : originCoord.x - this.distanceX;
@@ -81,25 +97,40 @@ cc.Class({
 
     //铺设砖块
     brickLaying: function () {
-        var y = coordList[0].y;
-        for (let i = 0; i < this.row; ++i) {
-            y = i == 0 ? y : y - this.distanceY;
+        // var y = coordList[0].y;
+        // for (let i = 0; i < this.row; ++i) {
+        //     y = i == 0 ? y : y - this.distanceY;
+        //     this.gridList[i] = [];
+        //     for (let j = this.rank - 1; j >= 0; --j) {
+        //         var x = coordList[j].x;
+        //         var newBrick = cc.instantiate(this.brick);
+        //         newBrick.x = x;
+        //         newBrick.y = y;
+        //         this.node.addChild(newBrick);
+        //         //id是从右向左数，也就是说 coordList[coordList.lenght - 1]的id为0
+        //         var id = this.rank - j - 1 + this.row * i;
+        //         newBrick.getComponent('Brick').id = id;
+        //         //存储二维数组的下标n,m
+        //         this.brickList[id] = {n: i, m: j, node: newBrick};
+        //         //把线性存储的地砖变成网格状存储，存储id
+        //         this.gridList[i][j] = id;
+        //     }
+        // }
+
+        for (let i = 0; i < coordList.length; ++i) {
             this.gridList[i] = [];
-            for (let j = this.rank - 1; j >= 0; --j) {
-                var x = coordList[j].x;
-                var newBrick = cc.instantiate(this.brick);
-                newBrick.x = x;
-                newBrick.y = y;
-                this.node.addChild(newBrick);
-                //id是从右向左数，也就是说 coordList[coordList.lenght - 1]的id为0
-                var id = this.rank - j - 1 + this.row * i;
-                newBrick.getComponent('Brick').id = id;
-                //存储二维数组的下标n,m
-                this.brickList[id] = {n: i, m: j, node: newBrick};
-                //把线性存储的地砖变成网格状存储，存储id
+            for (let j = coordList[i].length - 1; j >= 0; --j) {
+                var newNode = cc.instantiate(this.brick);
+                newNode.x = coordList[i][j].x;
+                newNode.y = coordList[i][j].y;
+                this.node.addChild(newNode);
+                var id = coordList[i].length - j - 1 + coordList.length * i;
+                newNode.getComponent('Brick').id = id;
+                this.brickList[id] = {n: i, m: j, node: newNode};
                 this.gridList[i][j] = id;
             }
         }
+
         this.floorChildren = this.node.getChildren();
     },
 
@@ -214,7 +245,9 @@ cc.Class({
             cc.GameData.Set(cc.Gl.Key_FWP, this.furniture.parent.convertToWorldSpaceAR(this.furniture.position));
 
             var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+            console.log(id);
             var adjacId = this.adjacentBrickId(this.brickList[id].n, this.brickList[id].m);
+            // console.log(adjacId);
             for (let i = 0; i < adjacId.length; ++i) {
                 var brick = this.floorChildren[adjacId[i]].getComponent('Brick');
                 if (!brick.isTouchRegion()) {
