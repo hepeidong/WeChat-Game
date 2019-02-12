@@ -18,12 +18,12 @@ cc.Class({
     },
 
     onButton: function (event) {
-        cc.Utl.loadPrefab('TestBuilding', this.floorLayer, (newNode) => {
+        cc.Utl.loadPrefab('Table', this.floorLayer, (newNode) => {
             // newNode.getComponent('Furniture').setGroupCoords(this.floorLayer.getComponent('FloorLayer').getCoords());
             // newNode.getComponent('Furniture').setFloor(this.floorLayer);
             // newNode.getComponent('Furniture').setCoord(1, 4);
 
-            this.floorLayer.getComponent('FloorLayer2').setFurniture(newNode);
+            this.floorLayer.getComponent('FloorLayer').setFurniture(newNode);
         });
     }
 

@@ -491,7 +491,10 @@
     "brick": {
       "__uuid__": "091d6f7c-c68b-466f-a3b2-b9e837a2329d"
     },
-    "isMove": true
+    "isMove": true,
+    "component": "Furniture",
+    "_eventHandlers": [],
+    "_furnitureNum": 0
   },
   {
     "__type__": "cc.Sprite",
@@ -637,7 +640,7 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 40,
+    "_actualFontSize": 20,
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,

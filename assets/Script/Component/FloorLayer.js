@@ -1,98 +1,268 @@
-/**
- * 坐标方程为y = ax + b
- * 坐标方程的初始方程为y = -x，初始设a等于-1
- * */
-
- //地板坐标
- var coordList = [
-     [{x: 263, y: 713}, {x: 220, y: 689}, {x: 177, y: 667}, {x: 134, y: 643}, {x: 89, y: 621}],
-     [{x: 305, y: 692}, {x: 264, y: 670}, {x: 222, y: 646}, {x: 179, y: 623}, {x: 135, y: 600}],
-     [{x: 347, y: 667}, {x: 306, y: 644}, {x: 263, y: 622}, {x: 220, y: 598}, {x: 175, y: 576}],
-     [{x: 391, y: 647}, {x: 350, y: 625}, {x: 311, y: 600}, {x: 265, y: 578}, {x: 221, y: 555}],
- ]
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        
+       brick: cc.Prefab,
+       isMove: true,
+       component: 'String',
+       _eventHandlers: [],//存放家具的回调函数
+       _furnitureNum: 0//目前地板被摆放了几个家具（只记录玩家自己摆放的）
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        //初始坐标
-        this.firstCoord = {
-            x: -200,
-            y: 200
-        };
-        
-        this.floor = this.node.getChildByName('floor');
+        this.row = 6;//行
+        this.rank = 6;//列
 
-        this.IntevarlY = 50;//每个板砖在y轴上的间隔
-        this.coordList1 = this.coordEquation(-1, this.coord(this.firstCoord, -1, 50), 10);
-        this.coordList2 = this.coordEquation(-1, this.coord(this.firstCoord, -1, 0), 10);
-        this.coordList3 = this.coordEquation(-1, this.coord(this.firstCoord, -1, -50), 10);
+        if (cc.GamePlatform.IsWechatGame()) {
+            this.distanceX = 96;//方块在x轴上的间隔
+            this.distanceY = 96;//方块在y轴上的间隔
+        }
+        else {
+            this.distanceX = 110//方块在x轴上的间隔
+            this.distanceY = 110;//方块在y轴上的间隔
+        }
+
+        this.brickList = [];//方块列表
+        this.gridList = [];//网格列表，最终是二维数组
+        this.floorChildren = [];//所有子节点
+
+        // this.scaleFloor();
+        // this.coordList();
+        // this.rotationFloor();
+        this.brickLaying();
+
+        this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
+    
+        this.furniture = null; //家具
     },
 
     start () {
 
     },
 
-    coord: function (firstCoord, a, b) {
-        var y = firstCoord.y + b;
-        var x = b - y;
-        return {x: x, y: y};
-    },
-    //点亮砖块
-    lightBricks: function (x, y) {
-        var coords = this.getCoords();
-        this.floor.active = true;
-        this.floor.x = coords[x][y].x;
-        this.floor.y = coords[x][y].y;
-    },
-
-    hideBricks: function () {
-        this.floor.active = false;
-    },
-
-    getCoords: function () {
-        var coords = [this.coordList1, this.coordList2, this.coordList3];
-        // var r = Math.asin(22 / cc.Utl.distance(189, 621, 134, 643));
-        // var angle = cc.Utl.angle(r);
-        // console.log('angle: ' + angle);
-        // var coords = [];
-        // for (let i = 0; i < coordList.length; ++i) {
-        //     coords[i] = [];
-        //     for (let j = 0; j < coordList[i].length; ++j) {
-        //         coords[i][j] = cc.Utl.rotationCoordinate(coordList[i][j], angle);
-        //     }
-        // }
-        // return coordList;
-        return coords;
-    },
-
-    addSprite: function (x, y) {
-        var node = cc.instantiate(this.floor);
-        node.x = x;
-        node.y = y;
-        node.active = true;
-        this.node.addChild(node);
-    },
-
-    //坐标方程函数 y = ax + b   n为坐标个数
-    coordEquation: function (a, coord, n) {
-        var coordList = [];
-        coordList.push(coord);
-        var b = coord.y - a*coord.x;
-        var y = coord.y;
-        for (let i = 0; i < n - 1; ++i) {
-            y -= this.IntevarlY;
-            var x = (y - b) / a;
-            coordList.push({x: x, y: y});
-            this.addSprite(x, y);
+    //计算coordList坐标
+    coordList: function () {
+        for (let i = this.rank - 1; i >= 0; --i) {
+            cc.Gl.OriginCoord.x = i == (this.rank - 1) ? cc.Gl.OriginCoord.x : cc.Gl.OriginCoord.x - this.distanceX;
+            cc.Gl.Coords[i] = {x: cc.Gl.OriginCoord.x, y: cc.Gl.OriginCoord.y};
         }
-        return coordList;
+    },
+
+    //把墙旋转成倾斜状态
+    rotationFloor: function () {
+        if (cc.GamePlatform.IsWechatGame()) {
+            this.node.x = 79;
+            this.node.y = -258;
+            //角度为负数，方向为逆时针旋转
+            this.node.rotationY = -35.8;
+            this.node.rotationX = -54.3;
+            return;
+        }
+        this.node.x = 0;
+        this.node.y = -268;
+        this.node.rotationY = -30.8;
+        this.node.rotationX = -59.5;
+    },
+
+    scaleFloor: function () {
+        console.log(cc.GamePlatform.GetScreenSize());
+        console.log('scaleX: ' + cc.GamePlatform.GetScreenScaleX() + ' scaleY: ' + cc.GamePlatform.GetScreenScaleY());
+        this.node.scaleX = cc.GamePlatform.GetScreenScaleX();
+        this.node.scaleY = cc.GamePlatform.GetScreenScaleY();
+    },
+
+    //铺设砖块
+    brickLaying: function () {
+        
+        for (let i = 0; i < cc.Gl.Coords.length; ++i) {
+            this.gridList[i] = [];
+            for (let j = cc.Gl.Coords[i].length - 1; j >= 0; --j) {
+                var newNode = cc.instantiate(this.brick);
+                newNode.x = cc.Gl.Coords[i][j].x;
+                newNode.y = cc.Gl.Coords[i][j].y;
+                newNode.zIndex = cc.Gl.OriginZIndexOfFloor + j + i;
+                this.node.addChild(newNode);
+                var id = cc.Gl.Coords[i].length - j - 1 + cc.Gl.Coords.length * i;
+                newNode.getComponent('Brick').id = id;
+                //存储二维数组的下标n,m
+                this.brickList[id] = {n: i, m: j, node: newNode};
+                this.gridList[i][j] = id;
+            }
+        }
+
+        this.floorChildren = this.node.getChildren();
+    },
+
+    //计算相邻地砖id
+    adjacentBrickId: function (n, m) {
+        var brickIDs = [];
+        if ((n - 1) >= 0) {
+            let a = n - 1;
+            this.adjacentElement(brickIDs, a, m);
+        }
+        this.adjacentElement(brickIDs, n, m);
+        if ((n + 1) < this.gridList.length) {
+            let a = n + 1;
+            this.adjacentElement(brickIDs, a, m);
+        }
+        return brickIDs;
+    },
+
+    adjacentElement: function (brickIDs, a, m) {
+        var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+        for (let i = 0; i < 3; ++i) {
+            var b = m - 1 + i;
+            if (this.gridList[a].length >= (b + 1)) {
+                
+                if (this.gridList[a][b] != id) {
+                    brickIDs.push(this.gridList[a][b]);
+                }
+            }
+        }
+    },
+
+    //设置回调函数
+    itemEventHandler: function (item, itemID, handler, customED) {
+        // console.log('itemEventHandler')
+
+        if (!this._eventHandlers[itemID]) {
+            this._eventHandlers[itemID] = new cc.Component.EventHandler();
+        }
+        this._eventHandlers[itemID].target = item;
+        this._eventHandlers[itemID].component = this.component;
+        this._eventHandlers[itemID].customEventData = customED;
+        this._eventHandlers[itemID].handler = handler;
+        this._eventHandlers[itemID].emit([handler]);
+    },
+
+    //设置家具
+    setFurniture: function (node) {
+        this._furnitureNum++;
+        node.getComponent('Furniture').itemId = this._furnitureNum - 1;
+        this.furniture = node;
+        this.furniture.parent = cc.find('Canvas');
+        if (cc.GameData.Get(cc.Gl.Key_SBId) != null) {
+            this.setFurniturePos(cc.GameData.Get(cc.Gl.Key_SBId));
+            cc.GameData.Set(cc.Gl.Key_BrickId, cc.GameData.Get(cc.Gl.Key_SBId));
+            cc.GameData.RemoveItem(cc.Gl.Key_SBId);
+        }
+        else {
+            var brickIDs = [8, 9, 10, 15, 16, 17, 22, 23, 24];//初始放置家具的方块,存储的是方块的id
+            var flag = false;//是否存在空闲的方块
+            for (let i = 0; i < brickIDs.length; ++i) {
+                var brick = this.floorChildren[brickIDs[i]].getComponent('Brick');
+                //如果方块上面没有家具没有
+                if (!brick.isFurniture) {
+                    flag = true;
+                    this.setFurniturePos(brick.id);
+                    cc.GameData.Set(cc.Gl.Key_BrickId, brick.id);
+                    // cc.GameData.Set(cc.Gl.Key_fCollisionId, brick.id);
+                    break;
+                }
+            }
+            if (!flag) {
+                var brick = this.floorChildren[brickIDs[0]].getComponent('Brick');
+                this.setFurniturePos(brick.id);
+                cc.GameData.Set(cc.Gl.Key_BrickId, brick.id);
+                // cc.GameData.Set(cc.Gl.Key_fCollisionId, brick.id);
+            }
+        }
+    },
+
+    //设置家具位置
+    setFurniturePos: function (id) {
+        if (id == null) return;
+        if (this.furniture == null) return;
+       
+        //设置家具的回调函数，并传入相关数据
+        this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, 'onFixed', {brick: this.brickList[id].node, isFurniture: this.brickList[id].node.getComponent('Brick').isFurniture});
+
+        //转化为相对于砖块父节点（即地板节点）的世界坐标
+        var worldPos = this.node.convertToWorldSpaceAR(this.brickList[id].node.position);
+        var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
+        //设置家具的位置
+        this.furniture.x = pos.x;
+        this.furniture.y = pos.y;
+        // this.furniture.zIndex = this.brickList[id].node.zIndex;
+        cc.GameData.Set(cc.Gl.Key_ZIndex, this.brickList[id].node.zIndex);
+    },
+ 
+    //触摸区域是否在家具内
+    isTouchRegionInFurniture:function (x, y) {
+        var worldPos = this.furniture.parent.convertToWorldSpaceAR(this.furniture.position);
+        var pos = this.node.convertToNodeSpaceAR(worldPos);
+        var rect = cc.Utl.rectRegion(pos.x, pos.y, this.furniture.getChildByName('building'));
+        if (x > rect.x1 && x < rect.x2 && y > rect.y1 && y < rect.y2) {
+            return true;
+        }
+        return false;
+    },
+
+    onStartEvent: function (event) {
+        if (this.furniture != null) {
+            var pos = this.node.convertToNodeSpaceAR(event.touch.getLocation());
+            if (this.isTouchRegionInFurniture(pos.x, pos.y)) {
+                this.isMove = true;
+            }
+            else {
+                this.isMove = false;
+            }
+        }
+    },
+
+    onMoveEvent: function (event) {
+        if (this.isMove == false) return;
+        var delta = event.touch.getDelta();
+        if (this.furniture != null) {
+            if (!this.furniture.getComponent('Furniture').isFixed) {
+                //移动家具位置
+                this.furniture.x += delta.x;
+                this.furniture.y += delta.y;
+            }
+            
+            //转化为相对于父节点世界坐标
+            cc.GameData.Set(cc.Gl.Key_FWP, this.furniture.parent.convertToWorldSpaceAR(this.furniture.position));
+
+            // var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+            // console.log('id: ' + id);
+            // if (!this.brickList[id].node.getComponent('Brick').isTouchRegion()) {
+            //     var adjacId = this.adjacentBrickId(this.brickList[id].n, this.brickList[id].m);
+            //     // console.log(adjacId);
+            //     for (let i = 0; i < adjacId.length; ++i) {
+            //         var brick = this.floorChildren[adjacId[i]].getComponent('Brick');
+            //         if (!brick.isTouchRegion()) {
+            //             brick.showColorBlock(false);
+            //         }
+            //         else {
+            //             brick.showColorBlock(true);
+            //             break;
+            //         }
+            //     }
+            // }
+            // else {
+            //     console.log('1111');
+            // }
+        }
+    },
+
+    onEndEvent: function (event) {
+        var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+        if (this.furniture.getComponent('Furniture').isFixed == false && this.isMove) {
+            this.setFurniturePos(id);
+        }
+    },
+
+    onCancelEvent: function (event) {
+        var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+        if (this.furniture.getComponent('Furniture').isFixed == false && this.isMove) {
+            this.setFurniturePos(id);
+        }
     }
 
     // update (dt) {},

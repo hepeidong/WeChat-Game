@@ -159,7 +159,7 @@ var GameData = (function () {
     return {
       //设置的基础数据
       addDataToBaseGameSet: function (value) {
-        this.Set(cc.Gl.Key_Set, value, true);
+        this.Set(cc.Gl.S_Key_Set, value, true);
       },
       //返回key在global链表中的位置
       Index: function (key) {

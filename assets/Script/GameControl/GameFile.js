@@ -37,11 +37,11 @@ var GameFile = (function(){
             //     return GameConfig.ShareTitle;
             // },
             readJS_GameSetMap: function() {
-                let data = GameData.Instance.Get(cc.Gl.Key_Set);
+                let data = GameData.Instance.Get(cc.Gl.S_Key_Set);
                 if (data)
                 {
                     GameData.Instance.addDataToBaseGameSet(data);
-                    return GameData.Instance.Get(cc.Gl.Key_Set);
+                    return GameData.Instance.Get(cc.Gl.S_Key_Set);
                 }
                 data = {};
                 let gameSetMap = Config.GameSetMap;
@@ -50,7 +50,7 @@ var GameFile = (function(){
                     data[key] = gameSetMap[key];
                 }
                 GameData.Instance.addDataToBaseGameSet(data);
-                return GameData.Instance.Get(cc.Gl.Key_Set);
+                return GameData.Instance.Get(cc.Gl.S_Key_Set);
             },
             writeJS_GameSetMap: function(data) {
                 GameData.Instance.addDataToBaseGameSet(data);

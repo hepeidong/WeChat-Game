@@ -507,7 +507,7 @@ cc.Class({
         var equ1 = this.coordEquation(coord1, coord2);
         var equ2 = this.coordEquation(coord2, coord3);
         var equ3 = this.coordEquation(coord3, coord4);
-        var equ4 = this.coordEquation(coord1, coord4);
+        var equ4 = this.coordEquation(coord4, coord1);
 
         return {c1: coord1, c2: coord2, c3: coord3, c4: coord4, e1: equ1, e2: equ2, e3: equ3, e4: equ4};
     },
@@ -521,31 +521,55 @@ cc.Class({
 
     //坐标点是否在菱形区域内 @param {cc.Node} target
     isInDiamRegion: function (coord, dia) {
-        if (this.isInDirecOfEqu(coord, this.D.NE, dia.e1) && this.isInDirecOfEqu(coord, this.D.NW, dia.e2) 
-        && this.isInDirecOfEqu(coord, this.D.SW, dia.e3) && this.isInDirecOfEqu(coord, this.D.SE, dia.e4)) 
+        // if (this.isInDirecOfEqu(coord, this.D.NE, dia.e1, 1) && this.isInDirecOfEqu(coord, this.D.NW, dia.e2, 2) 
+        // && this.isInDirecOfEqu(coord, this.D.SW, dia.e3, 3) && this.isInDirecOfEqu(coord, this.D.SE, dia.e4, 4)) 
+        // {
+        //     return true;
+        // }
+
+        if (this.getB(coord, dia.e1) > dia.e1.b && this.getB(coord, dia.e2) > dia.e2.b 
+        && this.getB(coord, dia.e3) < dia.e3.b && this.getB(coord, dia.e4) < dia.e4.b)
         {
             return true;
         }
+
         return false;
     },
 
+    getB: function (coord, equ) {
+        console.log(coord);
+        return coord.y - equ.a * coord.x;
+    },
+
     //坐标点是否在方程的这个方向上，dir为方向，equ为方程
-    isInDirecOfEqu: function (coord, dir, equ) {
-        // console.log(coord);
-        if (equ.a > 0) {
-            // if (dir == this.D.SW || dir == this.D.NE) return false;
-            console.log('111111111111111111');
+    isInDirecOfEqu: function (coord, dir, equ, a) {
+        console.log(a);
+        if (dir == this.D.NE || dir == this.D.NW) {
             var b = coord.y - equ.a * coord.x;
-            var d = b > equ.b ? this.D.NW : this.D.SE;
-            if (dir == d) return true;
+            var flag = b > equ.b ? true : false;
+            return flag;
         }
-        else if (equ.a < 0) {
-            // if (dir == this.D.NW || dir == this.D.SE) return false;
-            console.log('2222222222222222');
+        else if (dir == this.D.SW || dir == this.D.SE) {
             var b = coord.y - equ.a * coord.x;
-            var d = b > equ.b ? this.D.NE : this.D.SW;
-            if (dir == d) return true;
+            var flag = b < equ.b ? true : false;
+            return flag;
         }
+        // if (equ.a > 0) {
+        //     // if (dir == this.D.SW || dir == this.D.NE) return false;
+        //     // console.log('111111111111111111');
+        //     var b = coord.y - equ.a * coord.x;
+        //     // var d = b > equ.b ? this.D.NW : this.D.SE;
+        //     var flag = b > equ.b ? ture : false;
+        //     // if (dir == d) return true;
+        //     return flag;
+        // }
+        // else if (equ.a < 0) {
+        //     // if (dir == this.D.NW || dir == this.D.SE) return false;
+        //     // console.log('2222222222222222');
+        //     var b = coord.y - equ.a * coord.x;
+        //     var d = b > equ.b ? this.D.NE : this.D.SW;
+        //     if (dir == d) return true;
+        // }
         return false;
     }
 

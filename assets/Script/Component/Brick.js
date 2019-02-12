@@ -12,8 +12,9 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.node.getComponent(cc.RigidBody).enabledContactListener = true;
         this.colorBlock = this.node.getChildByName('colorBlock');
-        // this.colorBlock.active = true;
+       
         this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
@@ -25,6 +26,25 @@ cc.Class({
         //     this.colorBlock.width = 95;
         //     this.colorBlock.height = 95;
         // }
+    },
+
+    // onBeginContact: function (contact, selfCollider, otherCollider) {
+    //     console.log('onBeginContact 发生碰撞');
+    // },
+
+    onCollisionEnter: function (other, self) {
+        // console.log('onCollisionEnter 发生碰撞' + this.id);
+        cc.GameData.Set(cc.Gl.Key_BrickId, this.id);
+    },
+
+    onCollisionStay: function (other, self) {
+        this.colorBlock.active = true;
+    },
+
+    onCollisionExit: function (other, self) {
+        // console.log('onCollisionExit 碰撞结束' + this.id);
+        this.colorBlock.active = false;
+        
     },
 
     start () {
@@ -58,6 +78,7 @@ cc.Class({
             var flag = cc.Utl.isInDiamRegion(pos, dia);
             // console.log('id: ' + this.id + ' ' + flag)
             if (flag == true) {
+                // this.colorBlock.active = true;
                 cc.GameData.Set(cc.Gl.Key_BrickId, this.id);
             }
             return flag;
@@ -66,12 +87,12 @@ cc.Class({
     },
 
     onStartEvent: function (event) {
-        console.log('id: ' + this.id);
+        // console.log('id: ' + this.id);
         // this.colorBlock.active = true;
         if (!this.isFurniture) {
             this.clickStatus = true;
             cc.GameData.Set(cc.Gl.Key_SBId, this.id);
-            this.colorBlock.active = true;
+            // this.colorBlock.active = true;
         }
     },
 

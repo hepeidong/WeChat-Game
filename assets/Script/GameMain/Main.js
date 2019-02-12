@@ -13,6 +13,8 @@ cc.Class({
         if (GameControl.runGameControl()) {
             cc.Utl.WriteLog('游戏框架启动成功');
             cc.game.setFrameRate(30);
+            cc.director.getCollisionManager().enabled = true;
+            // cc.director.getCollisionManager().enabledDebugDraw  = true;
             // cc.GamePlatform.ScreenFitWidth();
             // var canvas = cc.find('Canvas');
             // for (let key in canvas.children) {
