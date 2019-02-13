@@ -6,6 +6,7 @@ cc.Class({
     properties: {
         isFurniture: false, //是否有家具
         id: 0,
+        furnitureId: -1,//家具id
         clickStatus: false //选中状态
     },
 
@@ -14,7 +15,7 @@ cc.Class({
     onLoad () {
         this.node.getComponent(cc.RigidBody).enabledContactListener = true;
         this.colorBlock = this.node.getChildByName('colorBlock');
-       
+        // this.colorBlock.active = true;
         this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
@@ -44,7 +45,6 @@ cc.Class({
     onCollisionExit: function (other, self) {
         // console.log('onCollisionExit 碰撞结束' + this.id);
         this.colorBlock.active = false;
-        
     },
 
     start () {
@@ -91,8 +91,11 @@ cc.Class({
         // this.colorBlock.active = true;
         if (!this.isFurniture) {
             this.clickStatus = true;
-            cc.GameData.Set(cc.Gl.Key_SBId, this.id);
             // this.colorBlock.active = true;
+        }
+        else {
+            var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
+            furNode[this.furnitureId].getComponent('Furniture').editFurniture();//开启编辑模式
         }
     },
 

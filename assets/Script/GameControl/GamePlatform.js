@@ -27,10 +27,13 @@ GamePlatform.prototype = {
         return cc.director.getWinSizeInPixels();
     },
     GetScreenScaleX() {
-        return this.GetScreenSize().width / EXPLOIT_PIXELS_W;
+        return (this.GetScreenSize().width / EXPLOIT_PIXELS_W) * this.GetScale();
     },
     GetScreenScaleY() {
-        return this.GetScreenSize().height / EXPLOIT_PIXELS_H;
+        return (this.GetScreenSize().height / EXPLOIT_PIXELS_H) * this.GetScale();
+    },
+    GetScale() {
+        return (this.GetScreenSize().width*EXPLOIT_PIXELS_H) / (this.GetScreenSize().height*EXPLOIT_PIXELS_W);
     },
     ScreenFitWidth() {
         let canvas = cc.find('Canvas').getComponent(cc.Canvas);

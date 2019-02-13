@@ -14,6 +14,8 @@ cc.Class({
             cc.Utl.WriteLog('游戏框架启动成功');
             cc.game.setFrameRate(30);
             cc.director.getCollisionManager().enabled = true;
+            cc.Utl.WriteLog(cc.GamePlatform.GetScreenScaleX());
+            cc.Utl.WriteLog(cc.GamePlatform.GetScreenScaleY());
             // cc.director.getCollisionManager().enabledDebugDraw  = true;
             // cc.GamePlatform.ScreenFitWidth();
             // var canvas = cc.find('Canvas');

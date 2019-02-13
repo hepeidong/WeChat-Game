@@ -13,17 +13,16 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.row = 6;//行
-        this.rank = 6;//列
+        cc.GameData.Set(cc.Gl.Key_FurNode, []);
 
-        if (cc.GamePlatform.IsWechatGame()) {
-            this.distanceX = 96;//方块在x轴上的间隔
-            this.distanceY = 96;//方块在y轴上的间隔
-        }
-        else {
-            this.distanceX = 110//方块在x轴上的间隔
-            this.distanceY = 110;//方块在y轴上的间隔
-        }
+        // if (cc.GamePlatform.IsWechatGame()) {
+        //     this.distanceX = 96;//方块在x轴上的间隔
+        //     this.distanceY = 96;//方块在y轴上的间隔
+        // }
+        // else {
+            this.distanceX = 110 * cc.GamePlatform.GetScreenScaleX(); //方块在x轴上的间隔
+            this.distanceY = 110 * cc.GamePlatform.GetScreenScaleY();//方块在y轴上的间隔
+        // }
 
         this.brickList = [];//方块列表
         this.gridList = [];//网格列表，最终是二维数组
@@ -70,11 +69,11 @@ cc.Class({
         this.node.rotationX = -59.5;
     },
 
-    scaleFloor: function () {
-        console.log(cc.GamePlatform.GetScreenSize());
-        console.log('scaleX: ' + cc.GamePlatform.GetScreenScaleX() + ' scaleY: ' + cc.GamePlatform.GetScreenScaleY());
-        this.node.scaleX = cc.GamePlatform.GetScreenScaleX();
-        this.node.scaleY = cc.GamePlatform.GetScreenScaleY();
+    scaleFloor: function (brick) {
+        // console.log(cc.GamePlatform.GetScreenSize());
+        // console.log('scaleX: ' + cc.GamePlatform.GetScreenScaleX() + ' scaleY: ' + cc.GamePlatform.GetScreenScaleY());
+        brick.scaleX = cc.GamePlatform.GetScreenScaleX() * cc.Gl.Brick_ScaleX;
+        brick.scaleY = cc.GamePlatform.GetScreenScaleY() * cc.Gl.Brick_ScaleY;
     },
 
     //铺设砖块
@@ -84,6 +83,7 @@ cc.Class({
             this.gridList[i] = [];
             for (let j = cc.Gl.Coords[i].length - 1; j >= 0; --j) {
                 var newNode = cc.instantiate(this.brick);
+                this.scaleFloor(newNode);
                 newNode.x = cc.Gl.Coords[i][j].x;
                 newNode.y = cc.Gl.Coords[i][j].y;
                 newNode.zIndex = cc.Gl.OriginZIndexOfFloor + j + i;
@@ -128,7 +128,7 @@ cc.Class({
     },
 
     //设置回调函数
-    itemEventHandler: function (item, itemID, handler, customED) {
+    itemEventHandler: function (item, itemID, customED) {
         // console.log('itemEventHandler')
 
         if (!this._eventHandlers[itemID]) {
@@ -137,18 +137,40 @@ cc.Class({
         this._eventHandlers[itemID].target = item;
         this._eventHandlers[itemID].component = this.component;
         this._eventHandlers[itemID].customEventData = customED;
-        this._eventHandlers[itemID].handler = handler;
-        this._eventHandlers[itemID].emit([handler]);
+        this._eventHandlers[itemID].handler = 'onFixedPosEnter';
+        this._eventHandlers[itemID].emit(['onFixedPosEnter']);
     },
 
-    //设置家具
-    setFurniture: function (node) {
+    //缓存家具信息，参数意义：家具编号，在哪块砖上，是什么家具
+    storageFurniture: function (fId, bId, tId) {
+        let furList = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
+        furList.push({furnitureId: fId, brickId: bId, typeId: tId});
+        cc.GameData.Set(cc.Gl.S_Key_Furnitures, furList, true);
+    },
+
+    //增加家具
+    addFurniture: function (node) {
         this._furnitureNum++;
         node.getComponent('Furniture').itemId = this._furnitureNum - 1;
         this.furniture = node;
+        this.furniture.scaleX = cc.GamePlatform.GetScreenScaleX();
+        this.furniture.scaleY = cc.GamePlatform.GetScreenScaleY();
         this.furniture.parent = cc.find('Canvas');
+
+        //存储家具节点
+        var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
+        furNode.push(this.furniture);
+        cc.GameData.Set(cc.Gl.Key_FurNode, furNode);
+
+        //手指选中了一块空闲的砖块
         if (cc.GameData.Get(cc.Gl.Key_SBId) != null) {
-            this.setFurniturePos(cc.GameData.Get(cc.Gl.Key_SBId));
+            this.storageFurniture(this._furnitureNum - 1, cc.GameData.Get(cc.Gl.Key_SBId), 0);
+            //转化为相对于砖块父节点（即地板节点）的世界坐标
+            var worldPos = this.node.convertToWorldSpaceAR(this.floorChildren[cc.GameData.Get(cc.Gl.Key_SBId)].position);
+            var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
+            //设置位置
+            this.furniture.x = pos.x;
+            this.furniture.y = pos.y;
             cc.GameData.Set(cc.Gl.Key_BrickId, cc.GameData.Get(cc.Gl.Key_SBId));
             cc.GameData.RemoveItem(cc.Gl.Key_SBId);
         }
@@ -160,7 +182,13 @@ cc.Class({
                 //如果方块上面没有家具没有
                 if (!brick.isFurniture) {
                     flag = true;
-                    this.setFurniturePos(brick.id);
+                    this.storageFurniture(this._furnitureNum - 1, brick.id, 0);
+                    //转化为相对于砖块父节点（即地板节点）的世界坐标
+                    var worldPos = this.node.convertToWorldSpaceAR(this.floorChildren[brickIDs[i]].position);
+                    var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
+                    //设置位置
+                    this.furniture.x = pos.x;
+                    this.furniture.y = pos.y;
                     cc.GameData.Set(cc.Gl.Key_BrickId, brick.id);
                     // cc.GameData.Set(cc.Gl.Key_fCollisionId, brick.id);
                     break;
@@ -168,29 +196,38 @@ cc.Class({
             }
             if (!flag) {
                 var brick = this.floorChildren[brickIDs[0]].getComponent('Brick');
-                this.setFurniturePos(brick.id);
+                this.storageFurniture(this._furnitureNum - 1, brick.id, 0);
+                //转化为相对于砖块父节点（即地板节点）的世界坐标
+                var worldPos = this.node.convertToWorldSpaceAR(this.floorChildren[brickIDs[0]].position);
+                var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
+                //设置位置
+                this.furniture.x = pos.x;
+                this.furniture.y = pos.y;
                 cc.GameData.Set(cc.Gl.Key_BrickId, brick.id);
                 // cc.GameData.Set(cc.Gl.Key_fCollisionId, brick.id);
             }
         }
     },
 
+    //设置当前需要编辑的家具
+    setFurniture: function (node) {
+        this.furniture = node;
+    },
+
     //设置家具位置
     setFurniturePos: function (id) {
         if (id == null) return;
         if (this.furniture == null) return;
-       
-        //设置家具的回调函数，并传入相关数据
-        this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, 'onFixed', {brick: this.brickList[id].node, isFurniture: this.brickList[id].node.getComponent('Brick').isFurniture});
+        if (this.furniture.getComponent('Furniture').isFixed == true && !this.isMove) return;
 
         //转化为相对于砖块父节点（即地板节点）的世界坐标
         var worldPos = this.node.convertToWorldSpaceAR(this.brickList[id].node.position);
         var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
-        //设置家具的位置
-        this.furniture.x = pos.x;
-        this.furniture.y = pos.y;
-        // this.furniture.zIndex = this.brickList[id].node.zIndex;
+        
         cc.GameData.Set(cc.Gl.Key_ZIndex, this.brickList[id].node.zIndex);
+        //设置家具的回调函数，并传入相关数据
+        var data = {brick: this.brickList[id].node, isFurniture: this.brickList[id].node.getComponent('Brick').isFurniture, pos: {x: pos.x, y: pos.y}};
+        this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, data);
     },
  
     //触摸区域是否在家具内
@@ -253,16 +290,12 @@ cc.Class({
 
     onEndEvent: function (event) {
         var id = cc.GameData.Get(cc.Gl.Key_BrickId);
-        if (this.furniture.getComponent('Furniture').isFixed == false && this.isMove) {
-            this.setFurniturePos(id);
-        }
+        this.setFurniturePos(id);
     },
 
     onCancelEvent: function (event) {
         var id = cc.GameData.Get(cc.Gl.Key_BrickId);
-        if (this.furniture.getComponent('Furniture').isFixed == false && this.isMove) {
-            this.setFurniturePos(id);
-        }
+        this.setFurniturePos(id);
     }
 
     // update (dt) {},
