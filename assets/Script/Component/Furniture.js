@@ -6,32 +6,17 @@ cc.Class({
     properties: {
         itemId: 0,
         isFixed: false, //家具是否被固定在砖块上
-        fixedBtn: cc.Node
+        fixedBtn: cc.Node,
+        brickNum: {
+            default: 0,
+            tooltip: '家具占据的砖块数'
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        // this.node.rotationY = 0;
-        // this.node.rotationX = 0;
-        this._on();
-    },
-
-    _on: function () {
-        this.node.on(cc.Node.EventType.TOUCH_START, function(event){
-            // this._off();
-            console.log(event.touch.getLocation());
-        }.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, function(){}.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_END, function(){}.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_CANCEL, function(){}.bind(this), this);
-    },
-
-    _off: function () {
-        this.node.off(cc.Node.EventType.TOUCH_START, function(){}.bind(this), this);
-        this.node.off(cc.Node.EventType.TOUCH_MOVE, function(){}.bind(this), this);
-        this.node.off(cc.Node.EventType.TOUCH_END, function(){}.bind(this), this);
-        this.node.off(cc.Node.EventType.TOUCH_CANCEL, function(){}.bind(this), this);
+        this.building = this.node.getChildByName('building');
     },
 
     start () {
@@ -66,12 +51,26 @@ cc.Class({
         this.node.x = d.pos.x;
         this.node.y = d.pos.y;
         //当前砖块是否有家具
-        if (d.isFurniture == false) {
+        if (d.isFurniture == false) {//当前没有家具，把家具附着在砖块上
             this.isFixed = true;
             this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
-            d.brick.getComponent('Brick').isFurniture = true;//当前建筑落入的砖块
-            d.brick.getComponent('Brick').furnitureId = this.itemId;//在当前砖块上的家具编号
+            var IDs = [];
+            for (let i = 0; i < d.brick.length; ++i) {
+                d.brick[i].getComponent('Brick').isFurniture = true;//当前建筑落入的砖块
+                d.brick[i].getComponent('Brick').furnitureId = this.itemId;//在当前砖块上的家具编号
+                IDs.push(d.brick[i].getComponent('Brick').id)
+            }
+
+            var furList = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
+            furList[this.itemId].brickId = IDs;
+            cc.GameData.Set(cc.Gl.S_Key_Furnitures, furList, true);
         }
+        else {//当前有家具，把砖块设置为有外来家具入侵
+            for (let i = 0; i < d.brick.length; ++i) {
+                d.brick[i].getComponent('Brick').isInvasion = true;
+            }
+        }
+        d.brick[0].getComponent('Brick').showColorBlock(false);
     },
 
     onButtonClicked: function (event) {

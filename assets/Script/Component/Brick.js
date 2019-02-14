@@ -7,7 +7,7 @@ cc.Class({
         isFurniture: false, //是否有家具
         id: 0,
         furnitureId: -1,//家具id
-        clickStatus: false //选中状态
+        isInvasion: false//是否有另外别的家具入侵
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -35,16 +35,28 @@ cc.Class({
 
     onCollisionEnter: function (other, self) {
         // console.log('onCollisionEnter 发生碰撞' + this.id);
+        this.colorBlock.active = true;
         cc.GameData.Set(cc.Gl.Key_BrickId, this.id);
+        //如果发生碰撞时，砖块上已经有家具，则在结束碰撞时，不应该改变isFurniture
+        if (this.isFurniture) {
+            this.flag = true;
+        }
     },
 
     onCollisionStay: function (other, self) {
-        this.colorBlock.active = true;
+        // this.colorBlock.active = true;
     },
 
     onCollisionExit: function (other, self) {
         // console.log('onCollisionExit 碰撞结束' + this.id);
         this.colorBlock.active = false;
+        if (!this.flag) {
+            this.isFurniture = false;
+        }
+        else {
+            this.isInvasion = false;
+            this.flag = false;
+        }
     },
 
     start () {
@@ -87,15 +99,18 @@ cc.Class({
     },
 
     onStartEvent: function (event) {
-        // console.log('id: ' + this.id);
-        // this.colorBlock.active = true;
         if (!this.isFurniture) {
-            this.clickStatus = true;
-            // this.colorBlock.active = true;
+            
+            
         }
-        else {
-            var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
-            furNode[this.furnitureId].getComponent('Furniture').editFurniture();//开启编辑模式
+        else if (cc.GameData.Get(cc.Gl.Key_EditMode)) {//如果处于编辑模式
+            if (!this.isInvasion) {
+                var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
+                furNode[this.furnitureId].getComponent('Furniture').editFurniture();//开启单个家具的编辑模式
+            }
+            else {
+
+            }
         }
     },
 

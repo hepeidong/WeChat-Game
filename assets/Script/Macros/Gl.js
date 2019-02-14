@@ -39,4 +39,6 @@ Gl.Key_nCollisionId = 'key_nextCollisionId';//下一个发生碰撞的砖块id
 
 Gl.Key_ZIndex = 'key_zIndex';//家具z轴的渲染深度
 
+Gl.Key_EditMode = 'key_editMode';//编辑模式
+
 module.exports = Gl;
