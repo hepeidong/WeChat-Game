@@ -532,11 +532,17 @@
     },
     "_enabled": true,
     "itemId": 0,
+    "typeId": 2,
     "isFixed": false,
     "fixedBtn": {
       "__id__": 2
     },
-    "brickNum": 4
+    "brickNum": 4,
+    "originPosition": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    }
   },
   {
     "__type__": "cc.RigidBody",

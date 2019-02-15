@@ -130,6 +130,15 @@ cc.Class({
         warn.apply(console, arguments)
     },
 
+    addEventHandler: function (target, component, handler, data) {
+        var eventHandler = new cc.Component.EventHandler();
+        eventHandler.target = target;
+        eventHandler.component = component;
+        eventHandler.handler = handler;
+        eventHandler.customEventData = data;
+        eventHandler.emit([handler]);
+    },
+
     addClickEvent: function (node, target, component, handler) {
         let eventHandler = new cc.Component.EventHandler();
         eventHandler.target = target;

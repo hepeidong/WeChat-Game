@@ -174,7 +174,9 @@
     "_enabled": true,
     "isFurniture": false,
     "id": 0,
-    "clickStatus": false
+    "furnitureId": -1,
+    "beInvasion": false,
+    "sysComp": "FloorLayer"
   },
   {
     "__type__": "cc.RigidBody",

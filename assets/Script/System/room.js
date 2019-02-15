@@ -28,6 +28,7 @@ cc.Class({
     },
 
     onButton: function (event) {
+        // console.log('Room onButton');
         cc.GameData.Set(cc.Gl.Key_EditMode, !cc.GameData.Get(cc.Gl.Key_EditMode));
         this.decorateList.active = !this.decorateList.active;
     }

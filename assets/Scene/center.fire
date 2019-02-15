@@ -650,7 +650,7 @@
     "target": {
       "__id__": 2
     },
-    "component": "room",
+    "component": "Room",
     "handler": "onButton",
     "customEventData": ""
   },
