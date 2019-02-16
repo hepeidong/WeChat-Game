@@ -4,6 +4,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        itemId: 0,
         furniture: cc.Prefab,
         _isAdd: false
     },
@@ -13,6 +14,9 @@ cc.Class({
     onLoad () {
         this.initialize();
         this._on();
+
+        this.sprt_item = this.node.getChildByName('sprt_item');
+        this.node.setContentSize(this.sprt_item.getContentSize());
     },
 
     initialize () {
@@ -29,7 +33,7 @@ cc.Class({
     _on: function () {
         this.node.on(cc.Node.EventType.TOUCH_START, function(event){
             this.touchStart = true;
-        }.bind(this), this);
+        }, this);
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function(event){
             var delta = event.touch.getDelta();
@@ -38,49 +42,60 @@ cc.Class({
             //玩家手指向上拖动，达到摆设家具的条件
             if (this.fingerDeltaY >= 5) {
                 this.fingerDeltaY = 0;
+                this.node.parent.parent.getComponent(cc.Mask).enabled = false;
                 //让滑动视图停止滑动
                 cc.find('Canvas').getChildByName('decorateList').getComponent(cc.ScrollView).horizontal = false;
                 this.furnishable = true;
             }
             if (!this.furnishable) return;
-            this.furnishable = false;
-            if (!this.newNode) {
-                this.newNode = cc.instantiate(this.furniture);
-                this.newNode.parent = cc.find('Canvas');
-                var worldPos = this.node.parent.convertToWorldSpaceAR(this.node.position);
-                this.newNode.position = cc.find('Canvas').convertToNodeSpaceAR(worldPos);
-                this.newNode.x = this.newNode.x + this.node.getContentSize().width / 2;
-                this.originPos.x = this.newNode.x;
-                this.originPos.y = this.newNode.y;
-            }
+            
+            this.originPos.x = this.node.x;
+            this.originPos.y = this.node.y;
             
             //家具移动的垂直距离
             this.deltaY += delta.y;
+            this.sprt_item.y += delta.y;
             //家具被移出工具栏
-            if (this.deltaY >= (this.node.parent.getContentSize().height / 2 - this.node.y)) {
-                this.newNode.x += delta.x;
-                this.newNode.y += delta.y;
-                if (!this._isAdd) {
+            if (this.deltaY >= (this.node.parent.getContentSize().height / 2 - this.node.y + this.node.getContentSize().height / 2)) {
+                
+                //新建菜单
+                if (!this.newNode) {
+                    this.node.parent.parent.getComponent(cc.Mask).enabled = true;
                     this._isAdd = true;
+                    //让家具菜单不可见
+                    this.sprt_item.opacity = 0;
+
+                    this.newNode = cc.instantiate(this.furniture);
+                    this.newNode.parent = cc.find('Canvas');
+                    var worldPos = this.node.parent.convertToWorldSpaceAR(this.sprt_item.position);
+                    this.newNode.position = cc.find('Canvas').convertToNodeSpaceAR(worldPos);
+                    this.newNode.x = this.newNode.x + this.node.getContentSize().width / 2;
                     this.addFurniture();
+
+                    //让家具菜单回到原位
+                    this.sprt_item.x = this.node.x;
+                    this.sprt_item.y = this.node.y;
+                }
+                else {
+                    this.newNode.x += delta.x;
+                    this.newNode.y += delta.y;
                 }
             }
-            else {
-                this.newNode.y += delta.y;
-            }
-        }.bind(this), this);
+        }, this);
 
         this.node.on(cc.Node.EventType.TOUCH_END, function(event){
-            console.log('touch_end');
-            // if (this.updateTimer < this.updateIntervar) {
-            //     this.touchStart = false;
-            //     this.updateTimer = 0;
-            // }
-        }.bind(this), this);
+            console.error('end');
+            //家具没有移出菜单栏
+            if (this.deltaY < (this.node.parent.getContentSize().height / 2 - this.node.y)) {
+
+            }
+            else {
+                cc.find('Canvas').getChildByName('decorateList').getComponent(cc.ScrollView).horizontal = true;
+            }
+        }, this);
 
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, function(event){
             console.log('touch_cancel');
-            this.touchCancelNum++;
             if (this._isAdd) {
                 this.deltaY = 0;
                 this.newNode = null;
@@ -88,25 +103,10 @@ cc.Class({
                 this.furnishable = false;
                 this.setFurniturePos();
                 cc.find('Canvas').getChildByName('decorateList').getComponent(cc.ScrollView).horizontal = true;
+                var fadeTo = cc.fadeTo(0.3, 255);
+                this.sprt_item.runAction(fadeTo);
             }
-            //家具没有被移出工具栏，手指就释放了，则让家具单回原位，并删除
-            else if (this.deltaY < (this.node.parent.getContentSize().height / 2 - this.node.y)) {
-                if (this.touchCancelNum == 2) {
-                    this.touchCancelNum = 0;
-                    console.log('没有移出工具栏');
-                }
-                //    if (this.furnishable) {
-                //        var moveTo = cc.moveTo(0.2, this.originPos.x, this.originPos.y);
-                //        var callFunc = cc.callFunc(() => {
-                //            this.initialize();
-                //        }, this);
-                //        var seq = cc.sequence(moveTo, callFunc);
-                //        if (this.newNode) {
-                //            this.newNode.runAction(seq);
-                //        }
-                //    }
-           }
-        }.bind(this), this);
+        }, this);
     },
 
     addFurniture: function () {

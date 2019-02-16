@@ -83,6 +83,16 @@ cc.Class({
             this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
             return;
         }
+
+        // if (d.addFurniture) {
+        //     this.node.x = d.pos.x;
+        //     this.node.y = d.pos.y;
+        //     this.originPosition.x = d.pos.x;
+        //     this.originPosition.y = d.pos.y;
+
+        //     this.isFixed = true;
+        //     this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
+        // }
         
         if (this.isInvasion(this.brickData)) {//当前有家具，把砖块设置为有外来家具入侵
             //家具别的家具上面，让家具回到原位

@@ -59,7 +59,7 @@ cc.Class({
 
     //铺设砖块
     brickLaying: function () {
-        
+       
         for (let i = 0; i < cc.Gl.Coords.length; ++i) {
             this.gridList[i] = [];
             for (let j = cc.Gl.Coords[i].length - 1; j >= 0; --j) {
@@ -83,20 +83,20 @@ cc.Class({
     //计算相邻地砖id
     adjacentBrickId: function (n, m) {
         var brickIDs = [];
+        var id = this.gridList[n][m];
         if ((n - 1) >= 0) {
             let a = n - 1;
-            this.adjacentElement(brickIDs, a, m);
+            this.adjacentElement(brickIDs, a, m, id);
         }
         this.adjacentElement(brickIDs, n, m);
         if ((n + 1) < this.gridList.length) {
             let a = n + 1;
-            this.adjacentElement(brickIDs, a, m);
+            this.adjacentElement(brickIDs, a, m, id);
         }
         return brickIDs;
     },
 
-    adjacentElement: function (brickIDs, a, m) {
-        var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+    adjacentElement: function (brickIDs, a, m, id) {
         for (let i = 0; i < 3; ++i) {
             var b = m - 1 + i;
             if (this.gridList[a].length >= (b + 1)) {
@@ -129,6 +129,17 @@ cc.Class({
         cc.GameData.Set(cc.Gl.S_Key_Furnitures, furList, true);
     },
 
+    convertOfFurnitureAR: function (brick, f) {
+        //转化为相对于砖块父节点（即地板节点）的世界坐标
+        var worldPos = this.node.convertToWorldSpaceAR(brick.position);
+        var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
+        
+        cc.GameData.Set(cc.Gl.Key_ZIndex, brick.zIndex);
+        //设置家具的回调函数，并传入相关数据
+        var data = {pos: {x: pos.x, y: pos.y}, addFurniture: f};
+        this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, data);
+    },
+
     //增加家具
     addFurniture: function (node) {
         this._furnitureNum++;
@@ -144,6 +155,39 @@ cc.Class({
         cc.GameData.Set(cc.Gl.Key_FurNode, furNode);
 
         this.storageFurniture(this._furnitureNum - 1, [], this.furniture.getComponent('Furniture').typeId);
+
+        // var n = Math.floor(cc.Gl.Coords.length / 2);
+        // var m = Math.floor(cc.Gl.Coords[0].length / 2);
+        // var brickIDsArr = this.adjacentBrickId(n, m);
+        // var index = 0;
+        
+        // while(1) {
+        //     if (this.brickList[this.gridList[n][m]].node.getComponent('Brick').isFurniture == false) {
+        //         this.convertOfFurnitureAR(this.brickList[this.gridList[n][m]].node, true);
+        //     }
+        //     else {
+        //         var brickIDs = this.adjacentBrickId(n, m);
+        //         var flag = false;
+        //         for (let i = 0; i < brickIDs.length; ++i) {
+        //             if (this.brickList[brickIDs[i]].node.getComponent('Brick').isFurniture == false) {
+        //                 this.convertOfFurnitureAR(this.brickList[brickIDs[i]], true);
+        //                 flag = true;
+        //                 break;
+        //             }
+        //         }
+        //         if (!flag) {
+        //             if (index == brickIDsArr.length) {
+        //                 n = Math.floor(cc.Gl.Coords.length / 2);
+        //                 m = Math.floor(cc.Gl.Coords[0].length / 2);
+        //                 this.convertOfFurnitureAR(this.brickList[this.gridList[n][m]].node, true);
+        //                 break;
+        //             }
+        //             n = this.brickList[brickIDsArr[index]].n;
+        //             m = this.brickList[brickIDsArr[index]].m;
+        //             index++;
+        //         }
+        //     }
+        // }
     },
 
     //设置当前需要编辑的家具
@@ -162,18 +206,7 @@ cc.Class({
             this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, null);
         }
         else {
-            //转化为相对于砖块父节点（即地板节点）的世界坐标
-            var worldPos = this.node.convertToWorldSpaceAR(this.brickList[id].node.position);
-            var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
-            
-            cc.GameData.Set(cc.Gl.Key_ZIndex, this.brickList[id].node.zIndex);
-            //设置家具的回调函数，并传入相关数据
-            var bricks = [];
-            for (let i = 0; i < this.furniture.getComponent('Furniture').brickNum; ++i) {
-                bricks.push(this.brickList[id - i].node);
-            }
-            var data = {brick: bricks, isFurniture: this.brickList[id].node.getComponent('Brick').isFurniture, pos: {x: pos.x, y: pos.y}};
-            this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, data);
+            this.convertOfFurnitureAR(this.brickList[id].node, false);
         }
         
         

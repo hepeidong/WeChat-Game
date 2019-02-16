@@ -54,6 +54,9 @@ var GameFile = (function(){
             },
             writeJS_GameSetMap: function(data) {
                 GameData.Instance.addDataToBaseGameSet(data);
+            },
+            readJS_DecorateMap: function(key) {
+                return Config.DecorateMap[key];
             }
         }
     }

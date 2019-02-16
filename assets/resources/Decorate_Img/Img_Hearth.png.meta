@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "aab74398-02eb-4644-b808-7f4fabc6b533",
+  "uuid": "4b460dc1-23b6-4de6-95ee-1e306780c321",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "Refrigerator": {
+    "Img_Hearth": {
       "ver": "1.0.3",
-      "uuid": "9fcdd7cb-c2ee-4db8-b2fe-d158d288ceec",
-      "rawTextureUuid": "aab74398-02eb-4644-b808-7f4fabc6b533",
+      "uuid": "c104be8d-0ada-4d49-8c2c-30dbd21b6d94",
+      "rawTextureUuid": "4b460dc1-23b6-4de6-95ee-1e306780c321",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 124,
-      "height": 192,
-      "rawWidth": 124,
-      "rawHeight": 192,
+      "width": 449,
+      "height": 326,
+      "rawWidth": 449,
+      "rawHeight": 326,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

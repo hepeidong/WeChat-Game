@@ -1,9 +1,10 @@
-var Gl = require('Gl');
+var Global = require('Global');
 var GameData = require('GameData');
 var GameFile = require('GameFile');
 var SoundManager = require('SoundManager');
 var GamePlatform = require('GamePlatform');
 var Until = require('Until');
+var CommonRes = require('CommonRes');
 
 var GameControl = (function() {
     var _gameControl = null;
@@ -16,7 +17,7 @@ var GameControl = (function() {
     }
 
     function _init() {
-        cc.Gl = Gl;
+        cc.Gl = Global;
         //游戏数据管理器必须最先实例化
         if (GameData.getInstance() == null) return false;
         if (GameFile.getInstance() == null) return false;
@@ -28,6 +29,7 @@ var GameControl = (function() {
 
         cc.GamePlatform = new GamePlatform();
         cc.Utl = new Until();
+        cc.CommRes = new CommonRes();
         return true; 
     }
 

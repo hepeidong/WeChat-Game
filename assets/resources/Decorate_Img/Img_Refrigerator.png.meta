@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "95ab6a35-4d68-4a88-9ac0-7bdf6778ebec",
+  "uuid": "aab74398-02eb-4644-b808-7f4fabc6b533",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "bg3": {
+    "Img_Refrigerator": {
       "ver": "1.0.3",
-      "uuid": "4838d798-7997-4739-b296-92fe3d1c18f9",
-      "rawTextureUuid": "95ab6a35-4d68-4a88-9ac0-7bdf6778ebec",
+      "uuid": "9fcdd7cb-c2ee-4db8-b2fe-d158d288ceec",
+      "rawTextureUuid": "aab74398-02eb-4644-b808-7f4fabc6b533",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 503,
-      "height": 799,
-      "rawWidth": 503,
-      "rawHeight": 799,
+      "width": 124,
+      "height": 192,
+      "rawWidth": 124,
+      "rawHeight": 192,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
