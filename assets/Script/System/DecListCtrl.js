@@ -11,10 +11,6 @@ cc.Class({
 
     onLoad () {
         this.content = this.node.getComponent(cc.ScrollView).content;
-        this.content.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
-        this.content.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
-        this.content.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
-        this.content.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
 
         this.initialize();
         this.initItemPool('Furniture');
@@ -63,30 +59,16 @@ cc.Class({
             this.itemPool.put(item);
         }
         this.items.push(item);
-        item.parent = parent;
         item.itemId = itemId;
         var fileName = 'Img_' + value.type + '.png';
         cc.CommRes.setTexture(item.getChildByName('sprt_item'), cc.CommRes.DecorateTexture(fileName));
+        item.getComponent('FurnitureItem').setContentSize();
+        item.parent = parent;
+        cc.Utl.addEventHandler(item, 'FurnitureItem', 'onInitItem', itemId);
     },
 
     removeItemPool: function (item) {
         this.itemPool.put(item);
-    },
-
-    onStartEvent: function (event) {
-
-    },
-
-    onMoveEvent: function (event) {
-
-    },
-
-    onEndEvent: function (event) {
-        console.log('end');
-    },
-
-    onCancelEvent: function (event) {
-
     }
 
     // update (dt) {},

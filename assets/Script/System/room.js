@@ -22,11 +22,6 @@ cc.Class({
 
     },
 
-    //编辑家具的回调
-    onEdit: function (s, d) {
-        this.floorLayer.getComponent('FloorLayer').setFurniture(d.furniture);
-    },
-
     onButton: function (event) {
         // console.log('Room onButton');
         cc.GameData.Set(cc.Gl.Key_EditMode, !cc.GameData.Get(cc.Gl.Key_EditMode));

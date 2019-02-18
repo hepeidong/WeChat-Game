@@ -13,8 +13,6 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        cc.GameData.Set(cc.Gl.Key_FurNode, []);
-
         // if (cc.GamePlatform.IsWechatGame()) {
         //     this.distanceX = 96;//方块在x轴上的间隔
         //     this.distanceY = 96;//方块在y轴上的间隔
@@ -27,6 +25,8 @@ cc.Class({
         this.brickList = [];//方块列表
         this.gridList = [];//网格列表，最终是二维数组
         this.floorChildren = [];//所有子节点
+        this.furniture = null; //家具
+        this.furnitureList = [];
 
         this.brickLaying();
 
@@ -34,8 +34,6 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
-    
-        this.furniture = null; //家具
     },
 
     start () {
@@ -108,20 +106,6 @@ cc.Class({
         }
     },
 
-    //设置回调函数
-    itemEventHandler: function (item, itemID, customED) {
-        // console.log('itemEventHandler')
-
-        if (!this._eventHandlers[itemID]) {
-            this._eventHandlers[itemID] = new cc.Component.EventHandler();
-        }
-        this._eventHandlers[itemID].target = item;
-        this._eventHandlers[itemID].component = this.component;
-        this._eventHandlers[itemID].customEventData = customED;
-        this._eventHandlers[itemID].handler = 'onFixedPosEnter';
-        this._eventHandlers[itemID].emit(['onFixedPosEnter']);
-    },
-
     //缓存家具信息，参数意义：家具编号，在哪块砖上（是数组，因为有可能占用不止一块砖），是什么家具
     storageFurniture: function (fId, bIds, tId) {
         let furList = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
@@ -129,30 +113,34 @@ cc.Class({
         cc.GameData.Set(cc.Gl.S_Key_Furnitures, furList, true);
     },
 
-    convertOfFurnitureAR: function (brick, f) {
+    convertOfFurnitureAR: function (brick, id) {
         //转化为相对于砖块父节点（即地板节点）的世界坐标
         var worldPos = this.node.convertToWorldSpaceAR(brick.position);
         var pos = this.furniture.parent.convertToNodeSpaceAR(worldPos);
         
         cc.GameData.Set(cc.Gl.Key_ZIndex, brick.zIndex);
         //设置家具的回调函数，并传入相关数据
-        var data = {pos: {x: pos.x, y: pos.y}, addFurniture: f};
-        this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, data);
+        var bricks = [];
+        for (let i = 0; i < this.furniture.getComponent('Furniture').brickNum; ++i) {
+            if ((id - i) >= 0) {
+                bricks.push(this.brickList[id - i].node);
+            }
+        }
+        var data = {pos: {x: pos.x, y: pos.y}, bricks: bricks};
+        cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onFixedPosEnter',  data);
     },
 
     //增加家具
     addFurniture: function (node) {
         this._furnitureNum++;
-        node.getComponent('Furniture').itemId = this._furnitureNum - 1;
+        node.itemId = this._furnitureNum - 1;
         this.furniture = node;
         this.furniture.scaleX = cc.GamePlatform.GetScreenScaleX();
         this.furniture.scaleY = cc.GamePlatform.GetScreenScaleY();
         this.furniture.parent = cc.find('Canvas');
 
         //存储家具节点
-        var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
-        furNode.push(this.furniture);
-        cc.GameData.Set(cc.Gl.Key_FurNode, furNode);
+        this.furnitureList.push(this.furniture);
 
         this.storageFurniture(this._furnitureNum - 1, [], this.furniture.getComponent('Furniture').typeId);
 
@@ -198,15 +186,15 @@ cc.Class({
     //设置家具位置
     setFurniturePos: function () {
         if (this.furniture == null) return;
-        if (this.furniture.getComponent('Furniture').isFixed == true && !this.isMove) return;
+        if (this.furniture.getComponent('Adsorb').isFixed == true && !this.isMove) return;
 
         var id = cc.GameData.Get(cc.Gl.Key_BrickId);
         cc.GameData.RemoveItem(cc.Gl.Key_BrickId);
         if (id == null) {
-            this.itemEventHandler(this.furniture, this.furniture.getComponent('Furniture').itemId, null);
+            cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onFixedPosEnter',  null);
         }
         else {
-            this.convertOfFurnitureAR(this.brickList[id].node, false);
+            this.convertOfFurnitureAR(this.brickList[id].node, id);
         }
         
         
@@ -223,22 +211,31 @@ cc.Class({
         return false;
     },
 
+    onEdit: function (s, d) {
+        this.furniture = this.furnitureList[d];
+        this.furnitureList[d].getComponent('Adsorb').pullUp();
+    },
+
     //家具进入砖块时的回调
     onEnterBrick: function (s, d) {
         var bricks = [];
         for (let i = 0; i < d.furniture.getComponent('Furniture').brickNum; ++i) {
-            bricks.push(this.brickList[d.id - i].node);
+            if ((d.id - i) >= 0) {
+                bricks.push(this.brickList[d.id - i].node);
+            }
         }
-        cc.Utl.addEventHandler(d.furniture, 'Furniture', 'onEnterBrick', {bricks: bricks});
+        cc.Utl.addEventHandler(d.furniture, 'Shift', 'onEnterBrick', {bricks: bricks});
     },
 
     //家具离开砖块时的回调
     onLeaveBrick: function (s, d) {
         var bricks = [];
         for (let i = 0; i < d.furniture.getComponent('Furniture').brickNum; ++i) {
-            bricks.push(this.brickList[d.id - i].node);
+            if ((d.id - i) >= 0) {
+                bricks.push(this.brickList[d.id - i].node);
+            }
         }
-        cc.Utl.addEventHandler(d.furniture, 'Furniture', 'onLeaveBrick', {bricks: bricks});
+        cc.Utl.addEventHandler(d.furniture, 'Shift', 'onLeaveBrick', {bricks: bricks});
     },
 
     onStartEvent: function (event) {
@@ -246,9 +243,6 @@ cc.Class({
             var pos = this.node.convertToNodeSpaceAR(event.touch.getLocation());
             if (this.isTouchRegionInFurniture(pos.x, pos.y)) {
                 this.isMove = true;
-                if (!this.furniture.getComponent('Furniture').isFixed) {
-                    this.furniture.zIndex = cc.Gl.OriginZIndexOfFurniture;
-                }
             }
             else {
                 this.isMove = false;
@@ -260,7 +254,7 @@ cc.Class({
         if (this.isMove == false) return;
         var delta = event.touch.getDelta();
         if (this.furniture != null) {
-            if (!this.furniture.getComponent('Furniture').isFixed) {
+            if (!this.furniture.getComponent('Adsorb').isFixed) {
                 //移动家具位置
                 this.furniture.x += delta.x;
                 this.furniture.y += delta.y;

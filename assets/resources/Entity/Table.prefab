@@ -35,10 +35,16 @@
       },
       {
         "__id__": 16
+      },
+      {
+        "__id__": 17
+      },
+      {
+        "__id__": 18
       }
     ],
     "_prefab": {
-      "__id__": 17
+      "__id__": 19
     },
     "_id": "",
     "_opacity": 255,
@@ -437,18 +443,38 @@
       "__id__": 1
     },
     "_enabled": true,
-    "itemId": 0,
-    "typeId": 1,
-    "isFixed": false,
     "fixedBtn": {
       "__id__": 2
     },
-    "brickNum": 1,
+    "isCurrency": false,
+    "brickNum": 1
+  },
+  {
+    "__type__": "b3c0evR8jlKL63vdOtewRVC",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_isTrans": false
+  },
+  {
+    "__type__": "fbf9aJcq/5NDKn9Ei7SzaUY",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "isFixed": false,
     "originPosition": {
       "__type__": "cc.Vec2",
       "x": 0,
       "y": 0
-    }
+    },
+    "originBrickId": 0,
+    "_isTrans": false
   },
   {
     "__type__": "cc.RigidBody",
@@ -474,7 +500,7 @@
     "bullet": false
   },
   {
-    "__type__": "cc.PhysicsChainCollider",
+    "__type__": "cc.PhysicsBoxCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -487,29 +513,16 @@
     "_friction": 0.2,
     "_restitution": 0,
     "body": null,
-    "loop": false,
-    "points": [
-      {
-        "__type__": "cc.Vec2",
-        "x": -0.5,
-        "y": -0.5
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -0.5,
-        "y": 0.5
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 0.5,
-        "y": 0.5
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 0.5,
-        "y": -0.5
-      }
-    ]
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_size": {
+      "__type__": "cc.Size",
+      "width": 1,
+      "height": 1
+    }
   },
   {
     "__type__": "cc.BoxCollider",

@@ -91,7 +91,7 @@ cc.Class({
         //     that.node.addChild(newNode2);
         //     newNode.destroy();
         // }, newNode);
-        cc.Utl.loadPrefab('TestBuilding', this.node);
+        cc.Utl.loadPrefab('TestBuilding', null, this.node);
     },
 
     // called every frame

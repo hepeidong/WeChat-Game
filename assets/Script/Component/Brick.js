@@ -101,8 +101,7 @@ cc.Class({
             
         }
         else if (cc.GameData.Get(cc.Gl.Key_EditMode)) {//如果处于编辑模式
-            var furNode = cc.GameData.Get(cc.Gl.Key_FurNode);
-            furNode[this.furnitureId].getComponent('Furniture').editFurniture();//开启单个家具的编辑模式
+            cc.Utl.addEventHandler(this.node.parent, this.sysComp, 'onEdit', this.furnitureId);
         }
     },
 

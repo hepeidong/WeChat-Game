@@ -227,7 +227,7 @@ cc.Class({
         //     cb && cb(panelNode);
         // }
         // cc.loader.loadRes(loadPath, onResLoaded);
-        this.loadPrefab(panelName, cc.director.getScene().getChildByName('Canvas'), cb);
+        this.loadPrefab(panelName, cb, cc.director.getScene().getChildByName('Canvas'));
     },
 
     closeView: function (panelName) {
@@ -238,8 +238,9 @@ cc.Class({
         }
     },
 
-    loadPrefab: function (prefabName, parent, cb) {
-        var child = parent.getChildByName(prefabName);
+    loadPrefab: function (prefabName, cb, parent) {
+        var child = null;
+        if (parent) child = parent.getChildByName(prefabName);
         if (child != null) {
             child.active = true;
             cb && cb(child);
@@ -255,7 +256,7 @@ cc.Class({
             }
             var newNode = cc.instantiate(res);
             newNode.name = res.name;
-            if (!parent.getChildByName(res.name)) {
+            if (!(parent ? parent.getChildByName(res.name) : true)) {
                 parent.addChild(newNode);
             }
             cb && cb(newNode);
