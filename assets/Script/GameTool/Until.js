@@ -256,7 +256,7 @@ cc.Class({
             }
             var newNode = cc.instantiate(res);
             newNode.name = res.name;
-            if (!(parent ? parent.getChildByName(res.name) : true)) {
+            if (parent) {
                 parent.addChild(newNode);
             }
             cb && cb(newNode);

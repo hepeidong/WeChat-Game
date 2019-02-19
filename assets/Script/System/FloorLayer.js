@@ -29,7 +29,7 @@ cc.Class({
         this.furnitureList = [];
 
         this.brickLaying();
-
+        this.showDecorate();
         this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
         this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
@@ -57,7 +57,6 @@ cc.Class({
 
     //铺设砖块
     brickLaying: function () {
-       
         for (let i = 0; i < cc.Gl.Coords.length; ++i) {
             this.gridList[i] = [];
             for (let j = cc.Gl.Coords[i].length - 1; j >= 0; --j) {
@@ -76,6 +75,20 @@ cc.Class({
         }
 
         this.floorChildren = this.node.getChildren();
+    },
+
+    showDecorate: function () {
+        var furnitures = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
+        console.log(furnitures);
+        for (let i = 0; i < furnitures.length; ++i) {
+            cc.Utl.loadPrefab(cc.GameFile.readJS_DecorateMap('Furniture')[furnitures[i].typeId].type, (newNode) => {                
+                this.furniture = newNode;
+                this.furniture.itemId = furnitures[i].furnitureId;
+                this.furnitureList[this.furniture.itemId] = this.furniture;
+                this.convertOfFurnitureAR(this.brickList[furnitures[i].brickId[0]].node, furnitures[i].brickId[0]);
+                this.furniture = null;
+            }, cc.find('Canvas'));
+        }
     },
 
     //计算相邻地砖id
@@ -142,7 +155,7 @@ cc.Class({
         //存储家具节点
         this.furnitureList.push(this.furniture);
 
-        this.storageFurniture(this._furnitureNum - 1, [], this.furniture.getComponent('Furniture').typeId);
+        this.storageFurniture(this._furnitureNum - 1, [], this.furniture.furnitureType);
 
         // var n = Math.floor(cc.Gl.Coords.length / 2);
         // var m = Math.floor(cc.Gl.Coords[0].length / 2);
@@ -202,18 +215,25 @@ cc.Class({
  
     //触摸区域是否在家具内
     isTouchRegionInFurniture:function (x, y) {
-        var worldPos = this.furniture.parent.convertToWorldSpaceAR(this.furniture.position);
-        var pos = this.node.convertToNodeSpaceAR(worldPos);
-        var rect = cc.Utl.rectRegion(pos.x, pos.y, this.furniture.getChildByName('building'));
-        if (x > rect.x1 && x < rect.x2 && y > rect.y1 && y < rect.y2) {
-            return true;
+        for (let i = 0; i < this.furnitureList.length; ++i) {
+            var worldPos = cc.find('Canvas').convertToWorldSpaceAR(this.furnitureList[i].position);
+            var pos = this.node.convertToNodeSpaceAR(worldPos);
+            var rect = cc.Utl.rectRegion(pos.x, pos.y, this.furnitureList[i].getChildByName('building'));
+            if (x > rect.x1 && x < rect.x2 && y > rect.y1 && y < rect.y2) {
+                this.editFurniture(this.furnitureList[i]);
+                console.error(i);
+                console.error(this.furnitureList[i].furnitureType);
+                return true;
+            }
         }
         return false;
     },
 
-    onEdit: function (s, d) {
-        this.furniture = this.furnitureList[d];
-        this.furnitureList[d].getComponent('Adsorb').pullUp();
+    editFurniture: function (furniture) {
+        if (cc.GameData.Get(cc.Gl.Key_EditMode)) {//处于编辑模式
+            this.furniture = furniture;
+            furniture.getComponent('Adsorb').pullUp();
+        }
     },
 
     //家具进入砖块时的回调
@@ -239,14 +259,12 @@ cc.Class({
     },
 
     onStartEvent: function (event) {
-        if (this.furniture != null) {
-            var pos = this.node.convertToNodeSpaceAR(event.touch.getLocation());
-            if (this.isTouchRegionInFurniture(pos.x, pos.y)) {
-                this.isMove = true;
-            }
-            else {
-                this.isMove = false;
-            }
+        var pos = this.node.convertToNodeSpaceAR(event.touch.getLocation());
+        if (this.isTouchRegionInFurniture(pos.x, pos.y)) {
+            this.isMove = true;
+        }
+        else {
+            this.isMove = false;
         }
     },
 

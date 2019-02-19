@@ -2,6 +2,12 @@
  * 家具组件
  */
 
+ var typeId = cc.Enum({
+    Refrigerator: 0,
+    Hearth: 1,
+    Table: 2
+ });
+
 cc.Class({
     extends: cc.Component,
 
@@ -20,20 +26,18 @@ cc.Class({
             visible: function(){ return !this.isCurrency; },
             serializable: function(){ return !this.isCurrency; }
         },
-        // originPosition: cc.Vec2,
-        // originBrickId: 0,
-        /**
-         * 家具放在地板或者墙壁上时，是否有一部分在地板或者墙壁上，如果是，则摆放在地板上或者墙壁上的动作失效
-         * 不对相关的数据进行更新，仅仅只是暂时吸附在这个位置上，并提示玩家摆放位置不合理
-         */
-        // _isTrans: false
+        furnitureType: {
+            default: typeId.Refrigerator,
+            type: typeId,
+            tooltip: '家具类型：Refrigerator冰箱，Hearth灶台，Table桌子'
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         this.node.itemId = 0;
-        this.node.typeId = 0;
+        this.node.furnitureType = this.furnitureType;
     },
 
     start () {

@@ -167,7 +167,7 @@ var GameData = (function () {
       },
       //返回global链表中在index位置的值
       GetGlobalAtIndex: function (index) {
-        return _linkedList.GetNodeAtIndex(index).data;
+        return _linkedList.GetNodeAtIndex(index) ? _linkedList.GetNodeAtIndex(index).data : null;
       },
       //获取游戏数据
       Get: function (key) {
@@ -195,6 +195,15 @@ var GameData = (function () {
       },
       GetUserInfo: function () {
         return _userInfo;
+      },
+      isExist: function (key) {
+        if (this.Get(key)) {
+          return true;
+        }
+        else if (this.GetGlobal(key)) {
+          return true;
+        }
+        return false;
       },
       //遍历所有游戏数据
       Update: function () {

@@ -100,9 +100,6 @@ cc.Class({
             
             
         }
-        else if (cc.GameData.Get(cc.Gl.Key_EditMode)) {//如果处于编辑模式
-            cc.Utl.addEventHandler(this.node.parent, this.sysComp, 'onEdit', this.furnitureId);
-        }
     },
 
     onMoveEvent: function (event) {
