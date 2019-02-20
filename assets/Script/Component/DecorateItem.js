@@ -47,7 +47,7 @@ cc.Class({
                 this.fingerDeltaY = 0;
                 this.node.parent.parent.getComponent(cc.Mask).enabled = false;
                 //让滑动视图停止滑动
-                cc.find('Canvas').getChildByName('decorateList').getComponent(cc.ScrollView).horizontal = false;
+                cc.find('Canvas').getChildByName('DecorateList').getComponent(cc.ScrollView).horizontal = false;
                 this.furnishable = true;
             }
             if (!this.furnishable) return;
@@ -96,7 +96,7 @@ cc.Class({
                 this._isAdd = false;
                 this.furnishable = false;
                 this.setFurniturePos();
-                cc.find('Canvas').getChildByName('decorateList').getComponent(cc.ScrollView).horizontal = true;
+                cc.find('Canvas').getChildByName('DecorateList').getComponent(cc.ScrollView).horizontal = true;
                 var fadeTo = cc.fadeTo(0.3, 255);
                 this.sprt_item.runAction(fadeTo);
             }
@@ -114,11 +114,11 @@ cc.Class({
     },
 
     addFurniture: function () {
-        cc.find('Canvas').getChildByName('floorLayer').getComponent('FloorLayer').addFurniture(this.newNode);
+        cc.find('Canvas').getChildByName('Room').getChildByName('FloorLayer').getComponent('FloorLayer').addFurniture(this.newNode);
     },
 
     setFurniturePos: function () {
-        cc.find('Canvas').getChildByName('floorLayer').getComponent('FloorLayer').setFurniturePos();
+        cc.find('Canvas').getChildByName('Room').getChildByName('FloorLayer').getComponent('FloorLayer').setFurniturePos();
     },
 
     start () {
@@ -130,16 +130,17 @@ cc.Class({
             this.updateTimer += dt;
             if (this.updateTimer >= this.updateIntervar) {
                 this.updateTimer = 0;
-                if (!this.touchMove) {
-                    this.touchStart = false;
-                    this.deltaY = 0;
-                    var s = cc.Utl.distance(this.node.x, this.node.y, this.originPos.x, this.originPos.y);
-                    var t = s / 10;
-                    var moveTo = cc.moveTo(t, this.originPos.x, this.originPos.y);
-                    this.sprt_item.runAction(moveTo);
-                }
-                else {
-                    this.touchMove = false;
+                if (!this.isTransboundary()) {
+                    if (!this.touchMove) {
+                        this.touchStart = false;
+                        this.furnishable = false;
+                        this.deltaY = 0;
+                        var moveTo = cc.moveTo(0.2, this.originPos.x, this.originPos.y);
+                        this.sprt_item.runAction(moveTo);
+                    }
+                    else {
+                        this.touchMove = false;
+                    }
                 }
             }
         }

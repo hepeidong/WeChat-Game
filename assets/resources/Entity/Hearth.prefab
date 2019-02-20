@@ -21,18 +21,12 @@
         "__id__": 10
       },
       {
-        "__id__": 13
+        "__id__": 15
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
-      {
-        "__id__": 16
-      },
-      {
-        "__id__": 17
-      },
       {
         "__id__": 18
       },
@@ -44,10 +38,16 @@
       },
       {
         "__id__": 21
+      },
+      {
+        "__id__": 22
+      },
+      {
+        "__id__": 23
       }
     ],
     "_prefab": {
-      "__id__": 22
+      "__id__": 24
     },
     "_id": "",
     "_opacity": 255,
@@ -360,10 +360,16 @@
     "_components": [
       {
         "__id__": 11
+      },
+      {
+        "__id__": 12
+      },
+      {
+        "__id__": 13
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 14
     },
     "_id": "",
     "_opacity": 255,
@@ -399,7 +405,7 @@
     "_localZOrder": 0,
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
-    "groupIndex": 0
+    "groupIndex": 4
   },
   {
     "__type__": "cc.Sprite",
@@ -428,6 +434,68 @@
     "_atlas": null
   },
   {
+    "__type__": "cc.PolygonCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 10
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "points": [
+      {
+        "__type__": "cc.Vec2",
+        "x": -138.2,
+        "y": -164.1
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 221,
+        "y": 49.9
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 223.2,
+        "y": 107.4
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 133.3,
+        "y": 164.3
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -31.6,
+        "y": 65.6
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -223.9,
+        "y": -51.8
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -223.8,
+        "y": -112.1
+      }
+    ]
+  },
+  {
+    "__type__": "9883a1CMD5C1Z5OC5vKLYrA",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 10
+    },
+    "_enabled": true,
+    "sysComp": "FloorLayer"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -450,11 +518,11 @@
     "_active": false,
     "_components": [
       {
-        "__id__": 14
+        "__id__": 16
       }
     ],
     "_prefab": {
-      "__id__": 15
+      "__id__": 17
     },
     "_id": "",
     "_opacity": 255,
@@ -497,7 +565,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 13
+      "__id__": 15
     },
     "_enabled": true,
     "_spriteFrame": {

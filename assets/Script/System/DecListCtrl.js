@@ -62,9 +62,9 @@ cc.Class({
         item.itemId = itemId;
         var fileName = 'Img_' + value.type + '.png';
         cc.CommRes.setTexture(item.getChildByName('sprt_item'), cc.CommRes.DecorateTexture(fileName));
-        item.getComponent('FurnitureItem').setContentSize();
+        item.getComponent('DecorateItem').setContentSize();
         item.parent = parent;
-        cc.Utl.addEventHandler(item, 'FurnitureItem', 'onInitItem', itemId);
+        cc.Utl.addEventHandler(item, 'DecorateItem', 'onInitItem', itemId);
     },
 
     removeItemPool: function (item) {

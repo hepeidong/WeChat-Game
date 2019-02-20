@@ -85,7 +85,6 @@ cc.Class({
                     // cc.Utl.WriteLog('brick ' + this.brickData[i].getComponent('Brick').id + ' isFurniture: ' + this.brickData[i].getComponent('Brick').isFurniture);
                 }
                 this.brickData[0].getComponent('Brick').showColorBlock(false);
-                console.log(IDs);
                 //移动了家具位置，更新家具列表数据
                 var furList = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
                 furList[this.node.itemId].brickId = IDs;

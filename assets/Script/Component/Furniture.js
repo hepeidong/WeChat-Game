@@ -38,23 +38,35 @@ cc.Class({
     onLoad () {
         this.node.itemId = 0;
         this.node.furnitureType = this.furnitureType;
+
+        this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
+        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
     },
 
     start () {
         this.node.zIndex = cc.Gl.OriginZIndexOfFurniture;
     },
 
-    onButtonClicked: function (event) {
-        // this.addEventHandler({});
+    onStartEvent: function (event) {
 
-        // this._off();
-        // if (this.isFurniture == false) {
-        //     this.isFixed = true;
-        //     this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
-        //     this.brick.getComponent('Brick').isFurniture = true;
-        //     this.isFurniture = false;
-        //     this.fixedBtn.active = false;
-        // }
+    },
+
+    onMoveEvent: function (event) {
+
+    },
+
+    onEndEvent: function (event) {
+
+    },
+
+    onCancelEvent: function (event) {
+        
+    },
+
+    onButtonClicked: function (event) {
+        
     }
 
     // update (dt) {},
