@@ -15,6 +15,11 @@ cc.Class({
         
     },
 
+    shiftPosition: function (deltaX, deltaY) {
+        this.node.x += deltaX;
+        this.node.y += deltaY;
+    },
+
     //家具进入砖块时的回调
     onEnterBrick: function (s, d) {
         for (let i = 0; i < d.bricks.length; ++i) {

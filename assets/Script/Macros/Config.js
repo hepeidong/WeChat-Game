@@ -11,9 +11,10 @@ Config.GameSetMap = {
   Config.DecorateMap = {
     //
     Furniture: [
-      {name: '冰箱', id: 0, type: 'Refrigerator'},
-      {name: '灶台', id: 1, type: 'Hearth'},
-      {name: '桌子', id: 2, type: 'Table'}
+      {name: '冰箱', FurnitureType: 0, fileName: 'Refrigerator'},
+      {name: '灶台', FurnitureType: 0, fileName: 'Hearth'},
+      {name: '桌子', FurnitureType: 0, fileName: 'Table'},
+      {name: '刀架', FurnitureType: 2, fileName: 'ToolCarrier'}
     ]
   }
 

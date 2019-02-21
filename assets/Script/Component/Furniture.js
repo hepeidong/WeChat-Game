@@ -2,10 +2,10 @@
  * 家具组件
  */
 
- var typeId = cc.Enum({
-    Refrigerator: 0,
-    Hearth: 1,
-    Table: 2
+cc.FurnitureType = cc.Enum({
+    Ground: 0,
+    Wall: 1,
+    Currency: 2
  });
 
 cc.Class({
@@ -26,10 +26,16 @@ cc.Class({
             visible: function(){ return !this.isCurrency; },
             serializable: function(){ return !this.isCurrency; }
         },
+        collisionNodeNum: {
+            default: 0,
+            tooltip: '碰撞节点数量',
+            visible: function(){ return this.isCurrency; },
+            serializable: function(){ return this.isCurrency; }
+        },
         furnitureType: {
-            default: typeId.Refrigerator,
-            type: typeId,
-            tooltip: '家具类型：Refrigerator冰箱，Hearth灶台，Table桌子'
+            default: cc.FurnitureType.Ground,
+            type: cc.FurnitureType,
+            tooltip: '家具类型：Ground地面物，Wall墙饰，Currency通用物'
         }
     },
 
@@ -39,30 +45,10 @@ cc.Class({
         this.node.itemId = 0;
         this.node.furnitureType = this.furnitureType;
 
-        this.node.on(cc.Node.EventType.TOUCH_START, this.onStartEvent.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onMoveEvent.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_END, this.onEndEvent.bind(this), this);
-        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onCancelEvent.bind(this), this);
     },
 
     start () {
         this.node.zIndex = cc.Gl.OriginZIndexOfFurniture;
-    },
-
-    onStartEvent: function (event) {
-
-    },
-
-    onMoveEvent: function (event) {
-
-    },
-
-    onEndEvent: function (event) {
-
-    },
-
-    onCancelEvent: function (event) {
-        
     },
 
     onButtonClicked: function (event) {

@@ -25,7 +25,7 @@ var GameControl = (function() {
 
         cc.GameData = GameData.Instance;
         cc.GameFile = GameFile.Instance;
-        cc.SoundManager = SoundManager;
+        cc.SoundManager = SoundManager.Instance;
 
         cc.GamePlatform = new GamePlatform();
         cc.Utl = new Until();
@@ -34,6 +34,7 @@ var GameControl = (function() {
     }
 
     return {
+        //获取游戏框架
         getGameControl: function() {
             return _gameControl;
         },

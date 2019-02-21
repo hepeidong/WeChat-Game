@@ -20,7 +20,7 @@ cc.Class({
         this.deltaY = 0;//装饰物移动的距离
         this.fingerDeltaY = 0;//手指移动的垂直距离
         this.updateTimer = 0;//
-        this.updateIntervar = 0.2;//这在真回调中，为0.5秒
+        this.updateIntervar = 0.1;//这在真回调中，为0.5秒
         this.touchStart = false;//触摸开始
         this.furnishable = false;//是否可以摆设家具
         this.touchCancelNum = 0;//touch_cancel触摸回调执行次数
@@ -104,7 +104,7 @@ cc.Class({
     },
 
     onInitItem: function (s, d) {
-        cc.Utl.loadPrefab(cc.GameFile.readJS_DecorateMap('Furniture')[d].type, (node) => {
+        cc.Utl.loadPrefab(cc.GameFile.readJS_DecorateMap('Furniture')[d].fileName, (node) => {
             this.decNode = node;//装饰物节点
         });
     },

@@ -33,6 +33,35 @@
       false,
       true,
       false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
     ]
   ],
   "design-resolution-height": 640,
@@ -43,9 +72,12 @@
   "group-list": [
     "default",
     "Brick",
-    "Furniture",
+    "Ground",
     "TouchPoint",
-    "Decorate"
+    "Decorate",
+    "Currency",
+    "Desktop",
+    "CollisionNode"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {

@@ -1,4 +1,4 @@
-/**吸附动作组件 */
+/**吸附组件 */
 
 cc.Class({
     extends: cc.Component,
@@ -37,7 +37,7 @@ cc.Class({
     },
 
     //释放手指，让家具吸附在砖块上的回调
-    onFixedPosEnter: function (s, d) {
+    onAdsorbEnvet: function (s, d) {
         //家具移动超出了地板范围，让它回到原位
         if (d == null) {
             //设置家具的位置
@@ -88,10 +88,16 @@ cc.Class({
                 //移动了家具位置，更新家具列表数据
                 var furList = cc.GameData.Get(cc.Gl.S_Key_Furnitures);
                 furList[this.node.itemId].brickId = IDs;
+                furList[this.node.itemId].coord = d.pos;
                 cc.GameData.Set(cc.Gl.S_Key_Furnitures, furList, true);
             }
         }
     },
+
+    //把物体固定在桌面上的事件
+    onPlaceEnvet: function (s, d) {
+
+    }
 
     // update (dt) {},
 });

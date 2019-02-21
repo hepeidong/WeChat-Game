@@ -60,7 +60,7 @@ cc.Class({
         }
         this.items.push(item);
         item.itemId = itemId;
-        var fileName = 'Img_' + value.type + '.png';
+        var fileName = 'Img_' + value.fileName + '.png';
         cc.CommRes.setTexture(item.getChildByName('sprt_item'), cc.CommRes.DecorateTexture(fileName));
         item.getComponent('DecorateItem').setContentSize();
         item.parent = parent;

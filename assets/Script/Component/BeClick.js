@@ -7,19 +7,27 @@ cc.Class({
         sysComp: {
             default: 'string',
             tooltip: '从属于哪个子系统'
+        },
+        find: {
+            default: 'string',
         }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        var children = cc.find('Canvas').getChildren();
+        for (let i = 0; i < children.lenght; ++i) {
+            
+        }
+    },
 
     start () {
 
     },
 
     onCollisionEnter: function (other, self) {
-        cc.Utl.addEventHandler(cc.find('Canvas').getChildByName(this.sysComp), this.sysComp, 'onEdit', this.node.parent);
+        cc.Utl.addEventHandler(cc.find(this.find, cc.find('Canvas')), this.sysComp, 'onEdit', this.node.parent);
     },
 
     onCollisionExit: function (other, self) {

@@ -65,20 +65,20 @@
         "__id__": 8
       },
       {
-        "__id__": 25
+        "__id__": 24
       },
       {
-        "__id__": 31
+        "__id__": 30
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 46
+        "__id__": 45
       },
       {
-        "__id__": 47
+        "__id__": 46
       }
     ],
     "_prefab": null,
@@ -321,10 +321,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 23
+        "__id__": 22
       },
       {
-        "__id__": 24
+        "__id__": 23
       }
     ],
     "_prefab": null,
@@ -674,9 +674,6 @@
       },
       {
         "__id__": 21
-      },
-      {
-        "__id__": 22
       }
     ],
     "_prefab": null,
@@ -760,43 +757,6 @@
     "_atlas": null
   },
   {
-    "__type__": "cc.PolygonCollider",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 18
-    },
-    "_enabled": true,
-    "tag": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "points": [
-      {
-        "__type__": "cc.Vec2",
-        "x": -0.3,
-        "y": 28
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": 277.5,
-        "y": 192.3
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -1.3,
-        "y": 356.5
-      },
-      {
-        "__type__": "cc.Vec2",
-        "x": -278.4,
-        "y": 192.7
-      }
-    ]
-  },
-  {
     "__type__": "cc.Widget",
     "_name": "",
     "_objFlags": 0,
@@ -870,17 +830,17 @@
     },
     "_children": [
       {
-        "__id__": 26
+        "__id__": 25
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 28
+        "__id__": 27
       },
       {
-        "__id__": 29
+        "__id__": 28
       }
     ],
     "_prefab": null,
@@ -925,14 +885,14 @@
     "_name": "Label",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 25
+      "__id__": 24
     },
     "_children": [],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 27
+        "__id__": 26
       }
     ],
     "_prefab": null,
@@ -977,7 +937,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 26
+      "__id__": 25
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -999,7 +959,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 24
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1025,7 +985,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 25
+      "__id__": 24
     },
     "_enabled": true,
     "transition": 2,
@@ -1047,7 +1007,7 @@
     "zoomScale": 1.2,
     "clickEvents": [
       {
-        "__id__": 30
+        "__id__": 29
       }
     ],
     "_N$interactable": true,
@@ -1085,7 +1045,7 @@
       "__uuid__": "29158224-f8dd-4661-a796-1ffab537140e"
     },
     "_N$target": {
-      "__id__": 25
+      "__id__": 24
     }
   },
   {
@@ -1093,7 +1053,7 @@
     "target": {
       "__id__": 2
     },
-    "component": "Room",
+    "component": "Main",
     "handler": "onButton",
     "customEventData": ""
   },
@@ -1106,26 +1066,26 @@
     },
     "_children": [
       {
-        "__id__": 32
+        "__id__": 31
       },
       {
-        "__id__": 38
+        "__id__": 37
       }
     ],
     "_tag": -1,
     "_active": false,
     "_components": [
       {
+        "__id__": 42
+      },
+      {
+        "__id__": 35
+      },
+      {
         "__id__": 43
       },
       {
-        "__id__": 36
-      },
-      {
         "__id__": 44
-      },
-      {
-        "__id__": 45
       }
     ],
     "_prefab": null,
@@ -1170,24 +1130,24 @@
     "_name": "scrollBar",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 31
+      "__id__": 30
     },
     "_children": [
       {
-        "__id__": 33
+        "__id__": 32
       }
     ],
     "_tag": -1,
     "_active": false,
     "_components": [
       {
-        "__id__": 35
+        "__id__": 34
+      },
+      {
+        "__id__": 40
       },
       {
         "__id__": 41
-      },
-      {
-        "__id__": 42
       }
     ],
     "_prefab": null,
@@ -1232,14 +1192,14 @@
     "_name": "bar",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 32
+      "__id__": 31
     },
     "_children": [],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 34
+        "__id__": 33
       }
     ],
     "_prefab": null,
@@ -1284,7 +1244,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 33
+      "__id__": 32
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1310,18 +1270,18 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 32
+      "__id__": 31
     },
     "_enabled": true,
     "_scrollView": {
-      "__id__": 36
+      "__id__": 35
     },
     "_touching": false,
     "_opacity": 255,
     "enableAutoHide": true,
     "autoHideTime": 1,
     "_N$handle": {
-      "__id__": 34
+      "__id__": 33
     },
     "_N$direction": 1
   },
@@ -1330,11 +1290,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 31
+      "__id__": 30
     },
     "_enabled": true,
     "content": {
-      "__id__": 37
+      "__id__": 36
     },
     "horizontal": true,
     "vertical": false,
@@ -1346,7 +1306,7 @@
     "cancelInnerEvents": true,
     "_N$horizontalScrollBar": null,
     "_N$verticalScrollBar": {
-      "__id__": 35
+      "__id__": 34
     }
   },
   {
@@ -1354,14 +1314,14 @@
     "_name": "content",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 38
+      "__id__": 37
     },
     "_children": [],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 40
+        "__id__": 39
       }
     ],
     "_prefab": null,
@@ -1406,18 +1366,18 @@
     "_name": "view",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 31
+      "__id__": 30
     },
     "_children": [
       {
-        "__id__": 37
+        "__id__": 36
       }
     ],
     "_tag": -1,
     "_active": true,
     "_components": [
       {
-        "__id__": 39
+        "__id__": 38
       }
     ],
     "_prefab": null,
@@ -1462,7 +1422,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 38
+      "__id__": 37
     },
     "_enabled": true,
     "_type": 0,
@@ -1476,7 +1436,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 37
+      "__id__": 36
     },
     "_enabled": true,
     "_layoutSize": {
@@ -1507,7 +1467,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 32
+      "__id__": 31
     },
     "_enabled": true,
     "isAlignOnce": true,
@@ -1533,7 +1493,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 32
+      "__id__": 31
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1559,7 +1519,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 31
+      "__id__": 30
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1585,7 +1545,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 31
+      "__id__": 30
     },
     "_enabled": true,
     "template": {
@@ -1597,7 +1557,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 31
+      "__id__": 30
     },
     "_enabled": true,
     "isAlignOnce": true,
