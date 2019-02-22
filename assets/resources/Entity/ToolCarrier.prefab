@@ -44,10 +44,13 @@
       },
       {
         "__id__": 29
+      },
+      {
+        "__id__": 30
       }
     ],
     "_prefab": {
-      "__id__": 30
+      "__id__": 31
     },
     "_id": "",
     "_opacity": 255,
@@ -931,6 +934,22 @@
       "width": 1,
       "height": 1
     }
+  },
+  {
+    "__type__": "fbf9aJcq/5NDKn9Ei7SzaUY",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "originPosition": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "originBrickId": 0,
+    "_isTrans": false
   },
   {
     "__type__": "cc.PrefabInfo",

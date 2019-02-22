@@ -16,10 +16,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        var children = cc.find('Canvas').getChildren();
-        for (let i = 0; i < children.lenght; ++i) {
-            
-        }
+        
     },
 
     start () {

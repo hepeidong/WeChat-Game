@@ -29,6 +29,7 @@ cc.Class({
         this.furniture = null; //家具
         this.furnitureList = [];
         this.touchPoint.y = cc.GamePlatform.GetScreenSize().height / 2;
+        this.selectionCount = 0;//编辑模式下，同时被选中的家具数
 
         this.brickLaying();
         this.showDecorate();
@@ -142,7 +143,7 @@ cc.Class({
             }
         }
         var data = {pos: {x: pos.x, y: pos.y}, bricks: bricks};
-        cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onAdsorbEnvet',  data);
+        cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onAdsorbEvent',  data);
     },
 
     //增加家具
@@ -201,20 +202,26 @@ cc.Class({
     //设置家具位置
     setFurniturePos: function () {
         if (this.furniture == null) return;
-        if (this.furniture.getComponent('Adsorb').isFixed == true && !this.isMove) return;
+        if (this.furniture.isFixed == true && !this.isMove) return;
 
         if (this.furniture.furnitureType == cc.FurnitureType.Ground) {
             var id = cc.GameData.Get(cc.Gl.Key_BrickId);
             cc.GameData.RemoveItem(cc.Gl.Key_BrickId);
             if (id == null) {
-                cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onAdsorbEnvet',  null);
+                cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onAdsorbEvent',  null);
             }
             else {
                 this.convertOfFurnitureAR(this.brickList[id].node, id);
             }
         }
         else if (this.furniture.furnitureType == cc.FurnitureType.Currency) {
+            var id = cc.GameData.Get(cc.Gl.Key_BrickId);
+            if (id == null) {
+                cc.Utl.addEventHandler(this.furniture, 'Adsorb', 'onPlaceEvent', null);
+            }
+            else {
 
+            }
         }
     },
  
@@ -240,6 +247,9 @@ cc.Class({
     },
 
     onEdit: function (s, d) {
+        this.selectionCount++;
+        if (this.selectionCount > 1) return;
+        
         if (cc.GameData.Get(cc.Gl.Key_EditMode)) {//处于编辑模式
             this.furniture = d;
             d.getComponent('Adsorb').pullUp();
@@ -297,10 +307,12 @@ cc.Class({
     },
 
     onEndEvent: function (event) {
+        this.selectionCount = 0;
         this.setFurniturePos();
     },
 
     onCancelEvent: function (event) {
+        this.selectionCount = 0;
         this.setFurniturePos();
     }
 

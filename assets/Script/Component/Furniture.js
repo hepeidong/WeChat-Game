@@ -12,9 +12,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // itemId: 0,
-        // typeId: 0,
-        // isFixed: false, //家具是否被固定在砖块上
         fixedBtn: cc.Node,
         isCurrency: {
             default: false,
@@ -44,7 +41,10 @@ cc.Class({
     onLoad () {
         this.node.itemId = 0;
         this.node.furnitureType = this.furnitureType;
-
+        this.node.isFixed = false;//家具是否被固定在砖块上
+        if (this.isCurrency) {
+            this.node.overstep = true;//家具是否越界
+        }
     },
 
     start () {

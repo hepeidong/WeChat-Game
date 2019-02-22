@@ -26,13 +26,14 @@ cc.Class({
         else {
             this.collisionNum++;
             if (this.collisionMax - 1 == this.collisionNum) {
-
+                other.node.overstep = false;
             }
         }
     },
 
     onCollisionExit: function (other, self) {
-
+        this.collisionNum--;
+        other.node.overstep = true;
     }
 
     // update (dt) {},

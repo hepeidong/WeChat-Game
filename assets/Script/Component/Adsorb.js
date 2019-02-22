@@ -4,7 +4,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        isFixed: false, //家具是否被固定在砖块上
         originPosition: cc.Vec2,
         originBrickId: 0,
         /**
@@ -24,7 +23,7 @@ cc.Class({
 
     //把家具从地板里拔起，编辑家具位置
     pullUp: function () {
-        this.isFixed = false;//家具不再固定在砖块上，可以编辑
+        this.node.isFixed = false;//家具不再固定在砖块上，可以编辑
         this.node.zIndex = cc.Gl.OriginZIndexOfFurniture;
     },
 
@@ -37,14 +36,14 @@ cc.Class({
     },
 
     //释放手指，让家具吸附在砖块上的回调
-    onAdsorbEnvet: function (s, d) {
+    onAdsorbEvent: function (s, d) {
         //家具移动超出了地板范围，让它回到原位
         if (d == null) {
             //设置家具的位置
             this.node.x = this.originPosition.x;
             this.node.y = this.originPosition.y;
 
-            this.isFixed = true;
+            this.node.isFixed = true;
             this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
             return;
         }
@@ -59,12 +58,12 @@ cc.Class({
             this.node.x = this.originPosition.x;
             this.node.y = this.originPosition.y;
 
-            this.isFixed = true;
+            this.node.isFixed = true;
             this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
 
             for (let i = 0; i < this.brickData.length; ++i) {
                 // this.brickData[i].getComponent('Brick').beInvasion = (this.brickData[i].getComponent('Brick').furnitureId != this.node.itemId && this.brickData[i].getComponent('Brick').furnitureId != -1) ? true : false
-                cc.Utl.WriteLog('brick ' + this.brickData[i].getComponent('Brick').id + ' isFurniture: ' + this.brickData[i].getComponent('Brick').isFurniture);
+                // cc.Utl.WriteLog('brick ' + this.brickData[i].getComponent('Brick').id + ' isFurniture: ' + this.brickData[i].getComponent('Brick').isFurniture);
             }
             this.brickData[0].getComponent('Brick').showColorBlock(false);
         }
@@ -77,7 +76,7 @@ cc.Class({
                 this.originPosition.x = d.pos.x;
                 this.originPosition.y = d.pos.y;
 
-                this.isFixed = true;
+                this.node.isFixed = true;
                 this.node.zIndex = cc.GameData.Get(cc.Gl.Key_ZIndex);
                 var IDs = [];
                 for (let i = 0; i < this.brickData.length; ++i) {
@@ -94,9 +93,11 @@ cc.Class({
         }
     },
 
-    //把物体固定在桌面上的事件
-    onPlaceEnvet: function (s, d) {
-
+    //让家具固定在桌面上的回调
+    onPlaceEvent: function (s, d) {
+        if (!this.node.overstep) {
+            this.node.isFixed = true;
+        }
     }
 
     // update (dt) {},
