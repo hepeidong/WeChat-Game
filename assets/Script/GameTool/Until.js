@@ -130,6 +130,17 @@ cc.Class({
         warn.apply(console, arguments)
     },
 
+    //类的继承
+    createExtend: function (child, parent) {
+        if (!(child instanceof Object)) {
+            child = function(){};
+        }
+        function Super() { };
+        Super.prototype = parent.prototype;
+        child.prototype = new Super();
+        child.prototype.constructor = child;
+    },
+
     addEventHandler: function (target, component, handler, data) {
         var eventHandler = new cc.Component.EventHandler();
         eventHandler.target = target;
