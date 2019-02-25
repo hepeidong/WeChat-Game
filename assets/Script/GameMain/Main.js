@@ -31,6 +31,28 @@ cc.Class({
             }
             //初始化编辑模式为false
             cc.GameData.Set(cc.Gl.Key_EditMode, false);
+
+            // var StateMachine = require('StateMachine');
+            // var fsm = new StateMachine();
+            // fsm.setupState({
+            //     states: ['A', 'B'],
+            //     events: [
+            //         {name: 'StateA', from: ['B', 'C'], to: 'A'},
+            //         {name: 'StateB', form: ['A', 'C'], to: 'B'},
+            //         {name: 'StateC', form: ['A', 'B'], to: 'B'}
+            //     ],
+            //     callbacks: {
+            //         onA: function() { console.log('测试 A'); },
+            //         onB: function() { console.log('测试 B'); },
+            //         onC: function() { console.log('测试 C'); }
+            //     }
+            // });
+            // var s = fsm.doEvent('StateA');
+            // console.log(s);
+            // s.onA();
+            // s.onB();
+            // s.onC();
+            // console.log(fsm);
         }
     },
 

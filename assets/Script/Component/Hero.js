@@ -1,4 +1,5 @@
-
+var ToWestState = require('ToWestState');
+var ToSouthState = require('ToSouthState');
 
 cc.Class({
     extends: cc.Component,
@@ -15,9 +16,9 @@ cc.Class({
         this._state = null;
 
         this.ToEastState = null,//东
-        this.ToWestState = null,//西
+        this.ToWestState = new ToWestState(),//西
         this.ToNorthState = null,//北
-        this.ToSouthState = null,//南
+        this.ToSouthState = new ToSouthState(),//南
         this.ToNortheastState = null,//东北
         this.ToSoutheastState = null,//东南
         this.ToSouthwestState = null,//西南
@@ -30,10 +31,11 @@ cc.Class({
 
     setHeroState: function (state) {
         this._state = state;
+        this._state.setHero(this);
     },
 
     getHeroState: function () {
-        this._state;
+        return this._state;
     },
 
     toEast: function () {

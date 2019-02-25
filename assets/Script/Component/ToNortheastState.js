@@ -29,13 +29,13 @@ cc.Class({
 
     },
 
-    toSouth: function () {
-        console.error('ToSouthState toSouth');
+    toNortheast: function () {
+        console.error('ToWestState toNortheast');
     },
 
-    toSoutheast: function () {
-        this._hero.setHeroState(this._hero.ToSoutheastState);
-        this._hero.getHeroState().toSoutheast();
+    toNorth: function () {
+        this._hero.setHeroState(this._hero.ToNorthState);
+        this._hero.getHeroState().toNorth();
     },
 
     toSouthwest: function () {
@@ -43,9 +43,9 @@ cc.Class({
         this._hero.getHeroState().toSouthwest();
     },
 
-    toNorth: function () {
-        this._hero.setHeroState(this._hero.ToNorthState);
-        this._hero.getHeroState().toNorth();
+    toEast: function () {
+        this._hero.setHeroState(this._hero.ToEastState);
+        this._hero.getHeroState().toEast();
     }
 
     // update (dt) {},

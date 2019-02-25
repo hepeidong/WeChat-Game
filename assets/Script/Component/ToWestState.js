@@ -30,7 +30,7 @@ cc.Class({
     },
 
     toWest: function () {
-
+        console.error('ToWestState toWest');
     },
 
     toNorthwest: function () {
